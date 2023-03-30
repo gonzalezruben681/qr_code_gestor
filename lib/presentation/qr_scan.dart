@@ -15,18 +15,6 @@ class _ScanScreenState extends State<ScanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //  final height = MediaQuery.of(context).size.height;
-    if (qrstr.isNotEmpty) {
-      // Parsear el mensaje para obtener un mapa
-      Map<String, dynamic> mapa = Map.fromEntries(qrstr.split(',').map((s) {
-        final List<String> parts = s.trim().split(':');
-        return MapEntry(parts[0], parts[1]);
-      }));
-
-      // Crear un nuevo objeto de la clase Contacto a partir del mapa
-      contacto = Contacto.fromMap(mapa);
-    }
-
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
@@ -59,6 +47,17 @@ class _ScanScreenState extends State<ScanScreen> {
           qrstr = value;
         });
       });
+
+      if (qrstr.isNotEmpty) {
+        // Parsear el mensaje para obtener un mapa
+        Map<String, dynamic> mapa = Map.fromEntries(qrstr.split(',').map((s) {
+          final List<String> parts = s.trim().split(':');
+          return MapEntry(parts[0], parts[1]);
+        }));
+
+        // Crear un nuevo objeto de la clase Contacto a partir del mapa
+        contacto = Contacto.fromMap(mapa);
+      }
     } catch (e) {
       setState(() {
         qrstr = 'unable to read this';
