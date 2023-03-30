@@ -1,9 +1,14 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-import 'dart:ui' as ui;
+// import 'dart:io';
+// import 'dart:typed_data';
+// import 'dart:ui' as ui;
+// import 'package:flutter/services.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image/image.dart' as im;
+import 'package:barcode_image/barcode_image.dart';
+import 'package:qr_code_gestor/presentation/qr_scan.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRGestor extends StatefulWidget {
@@ -29,7 +34,7 @@ class _QRGestorState extends State<QRGestor> {
         children: [
           if (qrstr != null && qrstrTel != null)
             QrImage(
-              data: 'nombre: $qrstr - telefono: $qrstrTel',
+              data: 'nombre: $qrstr, telefono: $qrstrTel',
               size: 250,
             ),
           Container(
@@ -66,7 +71,19 @@ class _QRGestorState extends State<QRGestor> {
                 _button(
                     text: 'DESCARGAR QR',
                     onPressed: exportPng,
-                    icon: Icons.download)
+                    icon: Icons.download),
+                const SizedBox(height: 15),
+                _button(
+                    text: 'ESCANEAR QR',
+                    // Dentro del widget `FirstRoute`
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ScanScreen()),
+                      );
+                    },
+                    icon: Icons.qr_code)
               ],
             ),
           ),
@@ -94,45 +111,26 @@ class _QRGestorState extends State<QRGestor> {
   }
 
   Future<void> exportPng() async {
-    final qrCode = QrImage(
-      data: 'Texto a codificar',
-      version: QrVersions.auto,
-      size: 200.0,
-    );
-    const imageSize = 200.0;
-
-    final painter = QrPainter(
-        data: 'nombre: $qrstr - telefono: $qrstrTel', version: qrCode.version);
+    final image = im.Image(250, 250);
+    im.fill(image, im.getColor(255, 255, 255));
+    drawBarcode(image, Barcode.qrCode(), 'nombre: $qrstr, telefono: $qrstrTel',
+        font: im.arial_48);
+    final data = im.encodePng(image);
     if (kIsWeb) {
-      final pngBytes = await painter.toImageData(imageSize);
-
-// Crea un objeto Blob con los bytes de la imagen
-      final blob = html.Blob([pngBytes], 'image/png');
-
-// Crea un objeto URL a partir del Blob
-      final url = html.Url.createObjectUrlFromBlob(blob);
-
-// Crea un enlace de descarga y haz clic en él para iniciar la descarga
-      final anchor = html.document.createElement('a') as html.AnchorElement
-        ..href = url
-        ..download = '$qrstr.png';
-      html.document.body!.append(anchor);
-      anchor.click();
-
-// Libera el objeto URL y el Blob de la memoria
-      html.Url.revokeObjectUrl(url);
+      final fileName = '$qrstr.png';
+      final path = await getSavePath(suggestedName: fileName);
+      if (path != null) {
+        final file = XFile.fromData(
+          Uint8List.fromList(data),
+          name: fileName,
+          mimeType: 'image/png',
+        );
+        await file.saveTo(path);
+      }
     } else {
-      final painter = QrPainter(
-          data: 'nombre: $qrstr - telefono: $qrstrTel',
-          version: qrCode.version);
-
 // Convierte la imagen a un objeto Uint8List
-      final pngBytes =
-          await painter.toImageData(imageSize, format: ui.ImageByteFormat.png);
-      final pngBytesList = pngBytes!.buffer.asUint8List();
-
-// Guarda la imagen en la galería del dispositivo
-      await ImageGallerySaver.saveImage(pngBytesList);
+      await ImageGallerySaver.saveImage(Uint8List.fromList(data),
+          quality: 100, name: qrstr);
     }
   }
 }
