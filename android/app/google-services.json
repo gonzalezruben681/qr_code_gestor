@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "6852483431",
+    "firebase_url": "https://votaciones-ipum-default-rtdb.firebaseio.com",
+    "project_id": "votaciones-ipum",
+    "storage_bucket": "votaciones-ipum.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6852483431:android:fa977393309d86d299b7c2",
+        "android_client_info": {
+          "package_name": "com.example.qr_code_gestor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6852483431-1v73pttrqn3dnnkffabe8ht0cl3hijbb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEAMsKE-eg_2Y0jfAFWtwbFkYWEo3-iL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6852483431-1v73pttrqn3dnnkffabe8ht0cl3hijbb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

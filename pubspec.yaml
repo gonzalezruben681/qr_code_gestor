@@ -42,6 +42,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   reactive_forms: ^14.2.0
   image:
+  firebase_core: ^2.9.0
 
 
 dev_dependencies:
