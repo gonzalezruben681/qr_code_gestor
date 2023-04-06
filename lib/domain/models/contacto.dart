@@ -1,10 +1,29 @@
+import 'dart:convert';
+
+Contacto contactoFromJson(String str) => Contacto.fromJson(json.decode(str));
+
+String contactoToJson(Contacto data) => json.encode(data.toJson());
+
 class Contacto {
-  String nombre;
-  String telefono;
+  final String nombre;
+  final String telefono;
+  final String? id;
 
-  Contacto({required this.nombre, required this.telefono});
+  Contacto({
+    this.id,
+    required this.nombre,
+    required this.telefono,
+  });
 
-  Contacto.fromMap(Map<String, dynamic> map)
-      : nombre = map['nombre'],
-        telefono = map['telefono'];
+  factory Contacto.fromJson(Map<String, dynamic> json) => Contacto(
+        nombre: json['nombre'],
+        telefono: json['telefono'],
+        id: json["id"] ?? '0',
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": nombre,
+        "telefono": telefono,
+        "id": id,
+      };
 }

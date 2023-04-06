@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image/image.dart' as im;
-import 'package:qr_code_gestor/presentation/qr_scan.dart';
+import 'package:qr_code_gestor/presentation/view/qr_scan.dart';
+import 'package:qr_code_gestor/presentation/widgets/custom_button.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -99,19 +100,19 @@ class _QRGestorState extends State<QRGestor> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  _button(
+                  CustomButton(
                       text: 'DESCARGAR QR',
                       onPressed: exportPng,
                       icon: Icons.download),
                   const SizedBox(height: 15),
-                  _button(
+                  CustomButton(
                       text: 'ESCANEAR QR',
                       // Dentro del widget `FirstRoute`
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ScanScreen()),
+                              builder: (context) => const QRScanWiew()),
                         );
                       },
                       icon: Icons.qr_code)
@@ -123,21 +124,6 @@ class _QRGestorState extends State<QRGestor> {
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _button(
-      {IconData? icon, String? text, required VoidCallback onPressed}) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon),
-          const SizedBox(width: 8),
-          Text(text ?? ''),
-        ],
       ),
     );
   }

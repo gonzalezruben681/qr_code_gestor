@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:qr_code_gestor/domain/models/contacto.dart';
 
-class ScanScreen extends StatefulWidget {
-  const ScanScreen({super.key});
+class QRScanWiew extends StatefulWidget {
+  const QRScanWiew({super.key});
 
   @override
-  State<ScanScreen> createState() => _ScanScreenState();
+  State<QRScanWiew> createState() => _QRScanWiewState();
 }
 
-class _ScanScreenState extends State<ScanScreen> {
+class _QRScanWiewState extends State<QRScanWiew> {
   String qrstr = '';
   Contacto? contacto;
 
@@ -56,7 +56,7 @@ class _ScanScreenState extends State<ScanScreen> {
         }));
 
         // Crear un nuevo objeto de la clase Contacto a partir del mapa
-        contacto = Contacto.fromMap(mapa);
+        contacto = Contacto.fromJson(mapa);
       }
     } catch (e) {
       setState(() {
