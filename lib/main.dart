@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_code_gestor/presentation/view/home_view.dart';
+import 'package:qr_code_gestor/presentation/view/login_view.dart';
+import 'package:qr_code_gestor/presentation/view/main_view.dart';
 import 'package:qr_code_gestor/presentation/view/qr_gestor.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:qr_code_gestor/presentation/view/qr_scan.dart';
@@ -11,7 +14,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,6 +28,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeView(),
+        '/login': (context) => const LoginView(),
+        '/main': (context) => const MainView(),
         '/register': (context) => const RegisterView(),
         '/qrgestor': (context) => const QRGestor(),
         '/qrscan': (context) => const QRScanWiew(),

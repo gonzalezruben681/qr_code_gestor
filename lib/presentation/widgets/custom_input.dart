@@ -43,28 +43,31 @@ class CustomInput extends StatelessWidget {
                     blurRadius: 5)
               ]),
         ),
-        ReactiveTextField<String>(
-          style: style,
-          cursorColor: const Color(0xff18255c),
-          formControlName: formControlName,
-          autocorrect: false,
-          obscureText: obscureText ?? false,
-          keyboardType: keyboardType ?? TextInputType.text,
-          validationMessages: validationMessages,
-          decoration: InputDecoration(
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              contentPadding: const EdgeInsets.fromLTRB(20.0, 15, 10.0, 10),
-              prefixIcon: Icon(
-                icon,
-                color: const Color(0xff18255c),
-              ),
-              suffixIcon: suffixIcon,
-              focusedBorder: InputBorder.none,
-              border: InputBorder.none,
-              hintText: placeholder),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+          child: ReactiveTextField<String>(
+            style: style,
+            cursorColor: const Color(0xff18255c),
+            formControlName: formControlName,
+            autocorrect: false,
+            obscureText: obscureText ?? false,
+            keyboardType: keyboardType ?? TextInputType.text,
+            validationMessages: validationMessages,
+            decoration: InputDecoration(
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                contentPadding: const EdgeInsets.fromLTRB(20.0, 15, 10.0, 10),
+                prefixIcon: Icon(
+                  icon,
+                  color: const Color(0xff18255c),
+                ),
+                suffixIcon: suffixIcon,
+                focusedBorder: InputBorder.none,
+                border: InputBorder.none,
+                hintText: placeholder),
+          ),
         ),
       ],
     );

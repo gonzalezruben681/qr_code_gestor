@@ -5,19 +5,20 @@ class AuthenticationUseCase {
 
   AuthenticationUseCase({required this.authenticationRepository});
 
-  Future<String?> authenticate(String email, String password) async {
-    return await authenticationRepository.authenticate(email, password);
+  Future<String?> loginUser(String email, String password) async {
+    return await authenticationRepository.loginUser(email, password);
   }
 
-  Future<void> register(String nombre, String email, String password) async {
-    return await authenticationRepository.register(nombre, email, password);
+  Future<void> registerUser(
+      String nombre, String email, String password) async {
+    return await authenticationRepository.registerUser(nombre, email, password);
   }
 
-  Future<void> signOut() async {
-    return await authenticationRepository.signOut();
+  Future<void> logoutUser() async {
+    return await authenticationRepository.logoutUser();
   }
 
-  Future<bool> isSignedIn() async {
-    return await authenticationRepository.isSignedIn();
+  Future<bool> isUserLoggedIn() async {
+    return await authenticationRepository.isUserLoggedIn();
   }
 }

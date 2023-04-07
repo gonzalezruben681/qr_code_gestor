@@ -1,33 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:qr_code_gestor/domain/repositories/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final FirebaseAuth auth;
-  final FirebaseFirestore firestore;
-  AuthRepositoryImpl({
-    required this.auth,
-    required this.firestore,
-  });
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Create storage
+  final _storage = const FlutterSecureStorage();
 
   @override
-  Future<String?> authenticate(String email, String password) async {
+  Future<String?> loginUser(String email, String password) async {
     try {
-      final userCredential = await auth.signInWithEmailAndPassword(
+      final userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      return userCredential.credential?.accessToken;
-    } on FirebaseAuthException catch (e) {
-      print('Error: $e');
+      final token = await userCredential.user?.getIdToken();
+      await _storage.write(key: 'token', value: token);
+      return token;
+    } on FirebaseAuthException {
       return null;
     }
   }
 
   @override
-  Future<void> register(String nombre, String email, String password) async {
+  Future<void> registerUser(
+      String nombre, String email, String password) async {
     // crear usuario
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
+    await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
     // agregar detalle del usuario
-    final userCollection = firestore.collection('users');
+    final userCollection = _firestore.collection('users');
     await userCollection.add({
       'name': nombre,
       'email': email,
@@ -35,13 +38,41 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<bool> isSignedIn() async {
-    final currentUser = auth.currentUser;
-    return currentUser != null;
+  Future<bool> isUserLoggedIn() async {
+    try {
+      String token = await _getToken();
+      return token.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<String> _getToken() async {
+    String? token = await _storage.read(key: 'token');
+    if (token == null) {
+      final user = _auth.currentUser;
+      if (user != null) {
+        final tokenResult = await user.getIdTokenResult();
+        token = tokenResult.token;
+        await _storage.write(key: 'token', value: token);
+      }
+    }
+    return token ?? '';
   }
 
   @override
-  Future<void> signOut() async {
-    await auth.signOut();
+  Future<void> logoutUser() async {
+    await _auth.signOut();
+    await _storage.delete(key: 'token');
   }
+
+  // UserModel getCurrentUser() {
+  //   final currentUser = _auth.currentUser;
+  //   if (currentUser != null) {
+  //     return UserModel(
+  //         id: currentUser.uid, name: currentUser, email: currentUser.email!);
+  //   } else {
+  //     throw Exception('User not logged in');
+  //   }
+  // }
 }

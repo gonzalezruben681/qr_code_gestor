@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_code_gestor/presentation/widgets/custom_button.dart';
 import 'package:qr_code_gestor/presentation/widgets/custom_input.dart';
+import 'package:qr_code_gestor/providers/firebase_auth_providers.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class RegisterView extends StatelessWidget {
@@ -25,13 +28,12 @@ class RegisterView extends StatelessWidget {
   }
 }
 
-class _Form extends StatefulWidget {
-  @override
-  State<_Form> createState() => __FormState();
-}
-
-class __FormState extends State<_Form> {
-  bool _showPassword = true;
+// ignore: must_be_immutable
+class _Form extends HookConsumerWidget {
+  // bool _showPassword = true;
+  late String nombre;
+  late String email;
+  late String password;
 
 // validaciones del formulario
   final form = FormGroup({
@@ -46,11 +48,14 @@ class __FormState extends State<_Form> {
     'password': FormControl<String>(validators: [
       Validators.required,
       Validators.maxLength(18),
+      Validators.minLength(6),
     ]),
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showPassword = useState(true);
+    final authRepository = ref.read(firebaseAuthProvider);
     return Center(
       child: Container(
         margin: const EdgeInsets.only(top: 40),
@@ -65,7 +70,7 @@ class __FormState extends State<_Form> {
                     offset: const Offset(0, 5),
                     blurRadius: 5)
               ]),
-          height: 340,
+          height: 352,
           width: 350,
           padding: const EdgeInsets.all(8.0),
           child: ReactiveForm(
@@ -80,7 +85,7 @@ class __FormState extends State<_Form> {
                       fontSize: 20,
                       letterSpacing: 1),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 CustomInput(
                   icon: Icons.perm_identity,
                   placeholder: 'Nombre',
@@ -92,7 +97,7 @@ class __FormState extends State<_Form> {
                         'Solo se permiten letras, comas y espacios',
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 CustomInput(
                   icon: Icons.supervised_user_circle,
                   placeholder: 'Email',
@@ -104,7 +109,7 @@ class __FormState extends State<_Form> {
                         'Ingrese un email correcto',
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 CustomInput(
                   icon: Icons.lock_outline,
                   placeholder: 'Contraseña',
@@ -114,16 +119,18 @@ class __FormState extends State<_Form> {
                         'Este campo es requerido',
                     ValidationMessage.maxLength: (error) =>
                         'Solo esta permitido hasta 18 caracteres',
+                    ValidationMessage.minLength: (error) =>
+                        'Solo esta permitido un minimo de 6 caracteres',
                   },
-                  obscureText: _showPassword,
+                  obscureText: showPassword.value,
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.remove_red_eye_outlined,
-                      color:
-                          _showPassword ? Colors.grey : const Color(0xff18255c),
+                      color: showPassword.value
+                          ? Colors.grey
+                          : const Color(0xff18255c),
                     ),
-                    onPressed: () =>
-                        setState(() => _showPassword = !_showPassword),
+                    onPressed: () => showPassword.value = !showPassword.value,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -135,6 +142,11 @@ class __FormState extends State<_Form> {
                       form.markAllAsTouched();
                       return;
                     }
+                    nombre = form.control('name').value!;
+                    email = form.control('email').value!;
+                    password = form.control('password').value!;
+                    authRepository.registerUser(
+                        nombre.trim(), email.trim(), password.trim());
                   },
                 ),
               ],
