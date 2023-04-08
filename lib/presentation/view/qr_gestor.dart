@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image/image.dart' as im;
 import 'package:qr_code_gestor/presentation/view/qr_scan.dart';
-import 'package:qr_code_gestor/presentation/widgets/custom_button.dart';
+import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -100,12 +100,12 @@ class _QRGestorState extends State<QRGestor> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  CustomButton(
+                  CustomButtonAtom(
                       text: 'DESCARGAR QR',
                       onPressed: exportPng,
                       icon: Icons.download),
                   const SizedBox(height: 15),
-                  CustomButton(
+                  CustomButtonAtom(
                       text: 'ESCANEAR QR',
                       // Dentro del widget `FirstRoute`
                       onPressed: () {

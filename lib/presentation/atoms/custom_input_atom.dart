@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-class CustomInput extends StatelessWidget {
+class CustomInputAtom extends StatelessWidget {
   final IconData icon;
   final Widget? suffixIcon;
   final String formControlName;
@@ -12,7 +12,7 @@ class CustomInput extends StatelessWidget {
   final TextStyle? style;
   final Map<String, String Function(Object)>? validationMessages;
 
-  const CustomInput({
+  const CustomInputAtom({
     super.key,
     required this.icon,
     required this.placeholder,
@@ -27,25 +27,24 @@ class CustomInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-          height: 50,
-          width: MediaQuery.of(context).size.height * .8,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    offset: const Offset(0, 5),
-                    blurRadius: 5)
-              ]),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-          child: ReactiveTextField<String>(
+    return Container(
+      margin: const EdgeInsets.only(left: 15, top: 20, right: 15),
+      child: Stack(
+        children: [
+          Container(
+            height: 50,
+            width: MediaQuery.of(context).size.height * .8,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      offset: const Offset(0, 5),
+                      blurRadius: 5)
+                ]),
+          ),
+          ReactiveTextField<String>(
             style: style,
             cursorColor: const Color(0xff18255c),
             formControlName: formControlName,
@@ -68,8 +67,8 @@ class CustomInput extends StatelessWidget {
                 border: InputBorder.none,
                 hintText: placeholder),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

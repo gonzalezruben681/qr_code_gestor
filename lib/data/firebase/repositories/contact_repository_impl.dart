@@ -19,7 +19,7 @@ class ContactRepositoryImpl implements ContactoRepository {
 
   @override
   Future<void> updateContact(Contacto contact) async {
-    final userDoc = firestore.collection('contactos').doc(contact.id);
+    // final userDoc = firestore.collection('contactos').doc(contact.id);
     // await userDoc.update({
     //   'name': user.name,
     //   'age': user.age,
