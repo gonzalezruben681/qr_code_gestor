@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_gestor/presentation/atoms/card_atom.dart';
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
 import 'package:qr_code_gestor/presentation/login/molecules/login_molecule.dart';
-import 'package:qr_code_gestor/presentation/utils/colors.dart';
+import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 
 class LoginOrganism extends StatelessWidget {
   const LoginOrganism({super.key});
@@ -10,7 +10,7 @@ class LoginOrganism extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CardAtom(
-      color: QRColors.grey,
+      color: QRUtils.grey,
       child: Column(
         children: [
           FormMolecule(),
