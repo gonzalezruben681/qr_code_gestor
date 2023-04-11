@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginView(),
         '/main': (context) => const MainView(),
         '/register': (context) => const RegisterView(),
-        '/qrgestor': (context) => const QRGestor(),
+        '/qrgestor': (context) => const QRGestorView(),
         '/qrscan': (context) => const QRScanWiew(),
       },
       // home: QRGestor(),

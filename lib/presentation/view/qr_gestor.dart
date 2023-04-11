@@ -10,14 +10,14 @@ import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-class QRGestor extends StatefulWidget {
-  const QRGestor({super.key});
+class QRGestorView extends StatefulWidget {
+  const QRGestorView({super.key});
 
   @override
-  State<QRGestor> createState() => _QRGestorState();
+  State<QRGestorView> createState() => _QRGestorViewState();
 }
 
-class _QRGestorState extends State<QRGestor> {
+class _QRGestorViewState extends State<QRGestorView> {
   String? nombre;
   String? telefono;
 
@@ -43,87 +43,81 @@ class _QRGestorState extends State<QRGestor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registrate'),
-      ),
-      body: ReactiveForm(
-        formGroup: form,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (nombre != null && telefono != null)
-              QrImage(
-                data:
-                    'nombre: ${nombre!.trim()}, telefono: ${telefono!.trim()}',
-                size: 250,
-              ),
-            Container(
-              alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width * .8,
-              child: Column(
-                children: [
-                  ReactiveTextField<String>(
-                    formControlName: 'nombre',
-                    validationMessages: {
-                      ValidationMessage.required: (error) =>
-                          'Este campo es requerido',
-                      ValidationMessage.pattern: (errror) =>
-                          'Solo se permiten letras, comas y espacios',
-                    },
-                    decoration: const InputDecoration(
-                      hintText: 'Ingresa su nombre completo',
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue, width: 2),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  ReactiveTextField<String>(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    formControlName: 'telefono',
-                    validationMessages: {
-                      ValidationMessage.required: (error) =>
-                          'Este campo es requerido',
-                      ValidationMessage.maxLength: (error) =>
-                          'Solo esta permitido hasta 10 números',
-                      ValidationMessage.pattern: (error) =>
-                          'Solo se permiten números',
-                    },
-                    decoration: const InputDecoration(
-                      hintText: 'Ingresa su número de telefono',
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue, width: 2),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  CustomButtonAtom(
-                      text: 'DESCARGAR QR',
-                      onPressed: exportPng,
-                      icon: Icons.download),
-                  const SizedBox(height: 15),
-                  CustomButtonAtom(
-                      text: 'ESCANEAR QR',
-                      // Dentro del widget `FirstRoute`
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const QRScanWiew()),
-                        );
-                      },
-                      icon: Icons.qr_code)
-                ],
-              ),
+    return ReactiveForm(
+      formGroup: form,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (nombre != null && telefono != null)
+            QrImage(
+              data: 'nombre: ${nombre!.trim()}, telefono: ${telefono!.trim()}',
+              size: 250,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-            )
-          ],
-        ),
+          Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width * .8,
+            child: Column(
+              children: [
+                ReactiveTextField<String>(
+                  formControlName: 'nombre',
+                  validationMessages: {
+                    ValidationMessage.required: (error) =>
+                        'Este campo es requerido',
+                    ValidationMessage.pattern: (errror) =>
+                        'Solo se permiten letras, comas y espacios',
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Ingresa su nombre completo',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                ReactiveTextField<String>(
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  formControlName: 'telefono',
+                  validationMessages: {
+                    ValidationMessage.required: (error) =>
+                        'Este campo es requerido',
+                    ValidationMessage.maxLength: (error) =>
+                        'Solo esta permitido hasta 10 números',
+                    ValidationMessage.pattern: (error) =>
+                        'Solo se permiten números',
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Ingresa su número de telefono',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                CustomButtonAtom(
+                    text: 'DESCARGAR QR',
+                    onPressed: exportPng,
+                    icon: Icons.download),
+                const SizedBox(height: 15),
+                CustomButtonAtom(
+                    text: 'ESCANEAR QR',
+                    // Dentro del widget `FirstRoute`
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const QRScanWiew()),
+                      );
+                    },
+                    icon: Icons.qr_code)
+              ],
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+          )
+        ],
       ),
     );
   }
