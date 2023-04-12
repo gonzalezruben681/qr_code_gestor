@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Material App',
       initialRoute: '/',
+
       routes: {
         '/': (context) => const HomeView(),
         '/login': (context) => const LoginView(),

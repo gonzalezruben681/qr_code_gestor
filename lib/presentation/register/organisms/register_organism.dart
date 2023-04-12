@@ -8,9 +8,21 @@ class RegisterOrganism extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CardAtom(
-      color: QRUtils.grey,
-      child: FormRegisterMolecule(),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CardAtom(
+            color: QRUtils.greyBackground.withOpacity(0.8),
+            child: Column(
+              children: [
+                FormRegisterMolecule(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

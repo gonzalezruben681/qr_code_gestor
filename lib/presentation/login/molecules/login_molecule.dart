@@ -1,8 +1,10 @@
 // ignore: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
@@ -38,14 +40,18 @@ class FormMolecule extends HookConsumerWidget {
         children: [
           Text(
             'Entrar',
-            style: TextStyle(
-                color: Colors.black.withOpacity(.7),
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-                letterSpacing: 1),
+            style: GoogleFonts.itim(
+              color: QRUtils.white,
+              fontWeight: FontWeight.w600,
+              fontSize: 20,
+            ),
           ),
           CustomInputAtom(
+            style: GoogleFonts.itim(
+              fontSize: 20,
+            ),
             icon: Icons.supervised_user_circle,
+            keyboardType: TextInputType.emailAddress,
             placeholder: 'Email',
             formControlName: 'email',
             validationMessages: {
@@ -54,6 +60,9 @@ class FormMolecule extends HookConsumerWidget {
             },
           ),
           CustomInputAtom(
+            style: GoogleFonts.itim(
+              fontSize: 20,
+            ),
             icon: Icons.lock_outline,
             placeholder: 'Contraseña',
             formControlName: 'password',
@@ -75,8 +84,10 @@ class FormMolecule extends HookConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: CustomButtonAtom(
               text: 'Iniciar sesión',
+              style:
+                  GoogleFonts.itim(fontSize: 20, color: QRUtils.greyBackground),
               onPressed: () async {
-                FocusScope.of(context).unfocus();
+                // FocusScope.of(context).unfocus();
                 if (form.invalid) {
                   form.markAllAsTouched();
                   return;
@@ -88,6 +99,7 @@ class FormMolecule extends HookConsumerWidget {
               },
             ),
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );

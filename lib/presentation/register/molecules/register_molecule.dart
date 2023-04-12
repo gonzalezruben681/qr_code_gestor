@@ -1,8 +1,10 @@
 // ignore: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
@@ -44,13 +46,16 @@ class FormRegisterMolecule extends HookConsumerWidget {
         children: [
           Text(
             'Crear Usuario ',
-            style: TextStyle(
-                color: Colors.black.withOpacity(.7),
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-                letterSpacing: 1),
+            style: GoogleFonts.itim(
+              color: QRUtils.white,
+              fontWeight: FontWeight.w600,
+              fontSize: 20,
+            ),
           ),
           CustomInputAtom(
+            style: GoogleFonts.itim(
+              fontSize: 20,
+            ),
             icon: Icons.perm_identity,
             placeholder: 'Nombre',
             formControlName: 'name',
@@ -61,6 +66,9 @@ class FormRegisterMolecule extends HookConsumerWidget {
             },
           ),
           CustomInputAtom(
+            style: GoogleFonts.itim(
+              fontSize: 20,
+            ),
             icon: Icons.supervised_user_circle,
             placeholder: 'Email',
             formControlName: 'email',
@@ -70,6 +78,9 @@ class FormRegisterMolecule extends HookConsumerWidget {
             },
           ),
           CustomInputAtom(
+            style: GoogleFonts.itim(
+              fontSize: 20,
+            ),
             icon: Icons.lock_outline,
             placeholder: 'Contraseña',
             formControlName: 'password',
@@ -95,6 +106,9 @@ class FormRegisterMolecule extends HookConsumerWidget {
             margin: const EdgeInsets.symmetric(vertical: 5),
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: CustomButtonAtom(
+              style: GoogleFonts.itim(
+                fontSize: 20,
+              ),
               text: 'Crear cuenta',
               onPressed: () async {
                 FocusScope.of(context).unfocus();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_code_gestor/presentation/molecules/background_molecule.dart';
 import 'package:qr_code_gestor/presentation/register/organisms/register_organism.dart';
 
 class RegisterTemplate extends StatelessWidget {
@@ -6,12 +7,13 @@ class RegisterTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: const [
-          RegisterOrganism(),
-        ],
-      ),
+    return Stack(
+      children: const [
+        BackgroundPageMolecule(),
+        SingleChildScrollView(
+          child: RegisterOrganism(),
+        ),
+      ],
     );
   }
 }
