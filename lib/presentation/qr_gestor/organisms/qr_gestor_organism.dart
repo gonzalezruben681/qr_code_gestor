@@ -11,6 +11,11 @@ class QRGestorOrganism extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // if (nombre != null && telefono != null)
+          //   QrImage(
+          //   data: 'nombre: ${nombre!.trim()}, telefono: ${telefono!.trim()}',
+          //   size: 250,
+          // ),
           QRGestorMolecule(),
         ],
       ),

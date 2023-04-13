@@ -40,15 +40,15 @@ class QRGestorMolecule extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (nombre != null && telefono != null)
-            QrImage(
-              data: 'nombre: ${nombre!.trim()}, telefono: ${telefono!.trim()}',
-              size: 250,
-            ),
           CardAtom(
             color: QRUtils.greyBackground,
             child: Column(
               children: [
+                const Icon(
+                  Icons.person_add,
+                  size: 80,
+                  color: QRUtils.yellowBackground,
+                ),
                 CustomInputAtom(
                   style: GoogleFonts.itim(
                     fontSize: 18,

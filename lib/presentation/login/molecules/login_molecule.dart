@@ -1,9 +1,11 @@
 // ignore: must_be_immutable
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qr_code_gestor/helper/snackbar_notification.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -94,8 +96,20 @@ class FormMolecule extends HookConsumerWidget {
                 }
                 email = form.control('email').value!;
                 password = form.control('password').value!;
-                authRepository.loginUser(email.trim(), password.trim());
-                Navigator.pushReplacementNamed(context, '/main');
+
+                final auth = await authRepository.loginUser(
+                    email.trim(), password.trim());
+                if (auth) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushReplacementNamed(context, '/main');
+                } else {
+                  // ignore: use_build_context_synchronously
+                  SnackbarNotification.handleNotification(
+                      context: context,
+                      message:
+                          'usuario/contraseña incorrectas o aun no esta registrado',
+                      color: Colors.red);
+                }
               },
             ),
           ),

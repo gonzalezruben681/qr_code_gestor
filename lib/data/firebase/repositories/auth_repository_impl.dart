@@ -11,15 +11,17 @@ class AuthRepositoryImpl implements AuthRepository {
   final _storage = const FlutterSecureStorage();
 
   @override
-  Future<String?> loginUser(String email, String password) async {
+  Future<bool> loginUser(String email, String password) async {
     try {
       final userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       final token = await userCredential.user?.getIdToken();
       await _storage.write(key: 'token', value: token);
-      return token;
+      return true;
     } on FirebaseAuthException {
-      return null;
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -27,8 +29,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> registerUser(
       String nombre, String email, String password) async {
     // crear usuario
-    await _auth.createUserWithEmailAndPassword(
+    final userNewCredential = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
+
+    final token = await userNewCredential.user?.getIdToken();
+    await _storage.write(key: 'token', value: token);
     // agregar detalle del usuario
     final userCollection = _firestore.collection('users');
     await userCollection.add({

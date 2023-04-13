@@ -5,7 +5,7 @@ class AuthenticationUseCase {
 
   AuthenticationUseCase({required this.authenticationRepository});
 
-  Future<String?> loginUser(String email, String password) async {
+  Future<bool> loginUser(String email, String password) async {
     return await authenticationRepository.loginUser(email, password);
   }
 
