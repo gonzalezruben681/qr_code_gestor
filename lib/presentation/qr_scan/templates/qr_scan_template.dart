@@ -39,6 +39,9 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
     });
   }
 
+  int? selectedIndex;
+  // bool isExpanded = true;
+
   @override
   Widget build(BuildContext context) {
     final qrstr = ref.read(contactDataProvider.notifier);
@@ -120,13 +123,96 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
           ],
         ),
         Container(
-          height: 70,
+          height: 200,
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: ListView.builder(
             itemCount: _options?.length,
             itemBuilder: (context, index) {
               final option = _options?[index];
-              return Text('Opción: ${option?.option}');
+              // return Text('Opción: ${option?.option}');
+              return InkWell(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onTap: () {
+                  setState(() {
+                    if (selectedIndex == index) {
+                      selectedIndex = null;
+                    } else {
+                      selectedIndex = index;
+                    }
+                  });
+                },
+                child: AnimatedContainer(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: selectedIndex == index ? 12 : 0,
+                    vertical: 8,
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  height: selectedIndex == index ? 108 : 50,
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  duration: const Duration(milliseconds: 1200),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: QRUtils.greyBackground.withOpacity(0.5),
+                        blurRadius: 20,
+                        offset: const Offset(5, 10),
+                      ),
+                    ],
+                    color: QRUtils.greyBackground,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(selectedIndex == index ? 10 : 20),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            option?.option ?? '',
+                            style: GoogleFonts.itim(
+                              color: QRUtils.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Icon(
+                            selectedIndex == index
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            color: QRUtils.white,
+                            size: 27,
+                          ),
+                        ],
+                      ),
+                      // selectedIndex == index
+                      //     ? const SizedBox()
+                      //     : const SizedBox(height: 20),
+                      AnimatedCrossFade(
+                        firstChild: const SizedBox.shrink(),
+                        secondChild: ListTile(
+                          title: Text(
+                            'Si',
+                            style: GoogleFonts.itim(
+                              color: QRUtils.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        crossFadeState: selectedIndex == index
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        duration: const Duration(milliseconds: 1200),
+                        reverseDuration: Duration.zero,
+                        sizeCurve: Curves.fastLinearToSlowEaseIn,
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
           ),
         ),
