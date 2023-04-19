@@ -4,7 +4,7 @@ import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class CustomInputAtom extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
   final Widget? suffixIcon;
   final String formControlName;
   final String placeholder;
@@ -17,7 +17,7 @@ class CustomInputAtom extends StatelessWidget {
 
   const CustomInputAtom({
     super.key,
-    required this.icon,
+    this.icon,
     required this.placeholder,
     this.keyboardType,
     this.obscureText,

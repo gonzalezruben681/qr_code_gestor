@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:qr_code_gestor/domain/usecases/auth.dart';
+import 'package:qr_code_gestor/domain/usecases/auth_usecase.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 
 class AppBarOrganism extends StatelessWidget {

@@ -7,7 +7,7 @@ class ContactUseCase {
 
   ContactUseCase({required this.contactoRepository});
 
-  Future<void> call(Contacto contact) async {
+  Future<void> callAdd(Contacto contact) async {
     await contactoRepository.addContact(contact);
   }
 

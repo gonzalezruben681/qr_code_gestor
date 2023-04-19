@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:qr_code_gestor/presentation/admin/organisms/admin_organism.dart';
 
 class AdminView extends StatelessWidget {
   const AdminView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Admin'));
+    return const AdminOrganism();
   }
 }
