@@ -6,16 +6,17 @@ class ContactRepositoryImpl implements ContactoRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<void> addContact(Contacto contact) async {
+  Future<void> addContact(ContactoModel contact) async {
     final userCollection = _firestore.collection('contactos');
     await userCollection.add({
-      'name': contact.nombre,
+      'nombre': contact.nombre,
       'telefono': contact.telefono,
+      'id_opcion': contact.idOpcion
     });
   }
 
   @override
-  Future<void> updateContact(Contacto contact) async {
+  Future<void> updateContact(ContactoModel contact) async {
     // final userDoc = firestore.collection('contactos').doc(contact.id);
     // await userDoc.update({
     //   'name': user.name,
@@ -24,23 +25,23 @@ class ContactRepositoryImpl implements ContactoRepository {
   }
 
   @override
-  Future<void> deleteContact(Contacto contact) async {
+  Future<void> deleteContact(ContactoModel contact) async {
     final userDoc = _firestore.collection('contactos').doc(contact.id);
     await userDoc.delete();
   }
 
   @override
-  Future<List<Contacto>> getContacts() async {
+  Future<List<ContactoModel>> getContacts() async {
     final userCollection = _firestore.collection('contactos');
     final queryContact = await userCollection.get();
     return queryContact.docs.map((doc) {
       final data = doc.data();
-      return Contacto.fromJson(data);
+      return ContactoModel.fromJson(data);
     }).toList();
   }
 
   @override
-  Future<Contacto?> scanQr(String qrstr) async {
+  Future<ContactoModel?> scanQr(String qrstr) async {
     if (qrstr.isNotEmpty) {
       Map<String, dynamic> mapa = Map.fromEntries(qrstr.split(',').map((s) {
         final List<String> parts = s.trim().split(':');
@@ -48,7 +49,7 @@ class ContactRepositoryImpl implements ContactoRepository {
       }));
 
       // Crear un nuevo objeto de la clase Contacto a partir del mapa
-      return Contacto.fromJson(mapa);
+      return ContactoModel.fromJson(mapa);
       // Parsear el mensaje para obtener un mapa
     } else {
       return null;

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 
 class CustomExpansionTileAtom extends StatefulWidget {
-  const CustomExpansionTileAtom({super.key});
+  const CustomExpansionTileAtom(
+      {super.key, this.index, required this.text, this.title, this.subtitle});
+  final int? index;
+  final String text;
+  final Widget? title;
+  final Widget? subtitle;
 
   @override
   State<CustomExpansionTileAtom> createState() =>
@@ -9,184 +16,93 @@ class CustomExpansionTileAtom extends StatefulWidget {
 }
 
 class _CustomExpansionTileAtomState extends State<CustomExpansionTileAtom> {
-  String tapToExpandIt = 'Tap to Expand it';
-  String sentence = 'Widgets that have global keys reparent their subtrees when'
-      ' they are moved from one location in the tree to another location in the'
-      ' tree. In order to reparent its subtree, a widget must arrive at its new'
-      ' location in the tree in the same animation frame in which it was removed'
-      ' from its old location the tree.'
-      ' Widgets that have global keys reparent their subtrees when they are moved'
-      ' from one location in the tree to another location in the tree. In order'
-      ' to reparent its subtree, a widget must arrive at its new location in the'
-      ' tree in the same animation frame in which it was removed from its old'
-      ' location the tree.';
-  bool isExpanded = true;
-  bool isExpanded2 = true;
+  int? selectedIndex;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        children: [
-          InkWell(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            onTap: () {
-              setState(() {
-                isExpanded = !isExpanded;
-              });
-            },
-            child: AnimatedContainer(
-              margin: EdgeInsets.symmetric(
-                horizontal: isExpanded ? 25 : 0,
-                vertical: 20,
-              ),
-              padding: const EdgeInsets.all(20),
-              height: isExpanded ? 70 : 330,
-              curve: Curves.fastLinearToSlowEaseIn,
-              duration: const Duration(milliseconds: 1200),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xff6F12E8).withOpacity(0.5),
-                    blurRadius: 20,
-                    offset: const Offset(5, 10),
-                  ),
-                ],
-                color: const Color(0xff6F12E8),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(isExpanded ? 20 : 0),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        tapToExpandIt,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Icon(
-                        isExpanded
-                            ? Icons.keyboard_arrow_down
-                            : Icons.keyboard_arrow_up,
-                        color: Colors.white,
-                        size: 27,
-                      ),
-                    ],
-                  ),
-                  isExpanded ? const SizedBox() : const SizedBox(height: 20),
-                  AnimatedCrossFade(
-                    firstChild: const Text(
-                      '',
-                      style: TextStyle(
-                        fontSize: 0,
-                      ),
-                    ),
-                    secondChild: Text(
-                      sentence,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.7,
-                      ),
-                    ),
-                    crossFadeState: isExpanded
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                    duration: const Duration(milliseconds: 1200),
-                    reverseDuration: Duration.zero,
-                    sizeCurve: Curves.fastLinearToSlowEaseIn,
-                  ),
-                ],
-              ),
+    return InkWell(
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      onTap: () {
+        setState(() {
+          if (selectedIndex == widget.index) {
+            selectedIndex = null;
+          } else {
+            selectedIndex = widget.index;
+          }
+        });
+      },
+      child: AnimatedContainer(
+        margin: EdgeInsets.symmetric(
+          horizontal: selectedIndex == widget.index ? 12 : 0,
+          vertical: 8,
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        height: selectedIndex == widget.index ? 108 : 50,
+        curve: Curves.fastLinearToSlowEaseIn,
+        duration: const Duration(milliseconds: 1200),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: QRUtils.greyBackground.withOpacity(0.5),
+              blurRadius: 20,
+              offset: const Offset(5, 10),
             ),
+          ],
+          color: QRUtils.greyBackground,
+          borderRadius: BorderRadius.all(
+            Radius.circular(selectedIndex == widget.index ? 10 : 20),
           ),
-          InkWell(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            onTap: () {
-              setState(() {
-                isExpanded2 = !isExpanded2;
-              });
-            },
-            child: AnimatedContainer(
-              margin: EdgeInsets.symmetric(
-                horizontal: isExpanded2 ? 25 : 0,
-                vertical: 20,
-              ),
-              padding: const EdgeInsets.all(20),
-              height: isExpanded2 ? 70 : 330,
-              curve: Curves.fastLinearToSlowEaseIn,
-              duration: const Duration(milliseconds: 1200),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xffFF5050).withOpacity(0.5),
-                    blurRadius: 20,
-                    offset: const Offset(5, 10),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Text(
+                //   option?.option ?? '',
+                //   style: GoogleFonts.itim(
+                //     color: QRUtils.white,
+                //     fontSize: 20,
+                //     fontWeight: FontWeight.w400,
+                //   ),
+                // ),
+
+                Text(
+                  widget.text,
+                  style: GoogleFonts.itim(
+                    color: QRUtils.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
                   ),
-                ],
-                color: const Color(0xffFF5050),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(isExpanded2 ? 20 : 0),
                 ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        tapToExpandIt,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Icon(
-                        isExpanded2
-                            ? Icons.keyboard_arrow_down
-                            : Icons.keyboard_arrow_up,
-                        color: Colors.white,
-                        size: 27,
-                      ),
-                    ],
-                  ),
-                  isExpanded2 ? const SizedBox() : const SizedBox(height: 20),
-                  AnimatedCrossFade(
-                    firstChild: const Text(
-                      '',
-                      style: TextStyle(
-                        fontSize: 0,
-                      ),
-                    ),
-                    secondChild: Text(
-                      sentence,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.7,
-                      ),
-                    ),
-                    crossFadeState: isExpanded2
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                    duration: const Duration(milliseconds: 1200),
-                    reverseDuration: Duration.zero,
-                    sizeCurve: Curves.fastLinearToSlowEaseIn,
-                  ),
-                ],
-              ),
+                Icon(
+                  selectedIndex == widget.index
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color: QRUtils.white,
+                  size: 27,
+                ),
+              ],
             ),
-          ),
-        ],
+            // selectedIndex == index
+            //     ? const SizedBox()
+            //     : const SizedBox(height: 20),
+            AnimatedCrossFade(
+              firstChild: const SizedBox.shrink(),
+              secondChild: ListTile(
+                title: widget.title,
+                subtitle: widget.subtitle,
+              ),
+              crossFadeState: selectedIndex == widget.index
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              duration: const Duration(milliseconds: 1200),
+              reverseDuration: Duration.zero,
+              sizeCurve: Curves.fastLinearToSlowEaseIn,
+            ),
+          ],
+        ),
       ),
     );
   }

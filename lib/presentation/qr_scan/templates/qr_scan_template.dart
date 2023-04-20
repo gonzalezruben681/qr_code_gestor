@@ -21,7 +21,7 @@ class QRScanTemplate extends ConsumerStatefulWidget {
 
 class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
   BarcodeCapture? barcode;
-  Contacto? contacto;
+  ContactoModel? contacto;
 
   Stream<List<OptionModel>>? _optionsStream;
   List<OptionModel>? _options;
@@ -40,13 +40,12 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
   }
 
   int? selectedIndex;
-  // bool isExpanded = true;
+  late ContactoModel contactoModel;
 
   @override
   Widget build(BuildContext context) {
     final qrstr = ref.read(contactDataProvider.notifier);
     final contact = ref.read(contactProvider);
-    // final opciones = ref.watch(optionProvider);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       // crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,86 +129,44 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
             itemBuilder: (context, index) {
               final option = _options?[index];
               // return Text('Opción: ${option?.option}');
-              return InkWell(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                onTap: () {
-                  setState(() {
-                    if (selectedIndex == index) {
-                      selectedIndex = null;
-                    } else {
-                      selectedIndex = index;
-                    }
-                  });
-                },
-                child: AnimatedContainer(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: selectedIndex == index ? 12 : 0,
-                    vertical: 8,
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  height: selectedIndex == index ? 108 : 50,
-                  curve: Curves.fastLinearToSlowEaseIn,
-                  duration: const Duration(milliseconds: 1200),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: QRUtils.greyBackground.withOpacity(0.5),
-                        blurRadius: 20,
-                        offset: const Offset(5, 10),
-                      ),
-                    ],
-                    color: QRUtils.greyBackground,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(selectedIndex == index ? 10 : 20),
+              return Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                height: 50,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: QRUtils.greyBackground.withOpacity(0.5),
+                      blurRadius: 20,
+                      offset: const Offset(5, 5),
                     ),
+                  ],
+                  color: QRUtils.greyBackground,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
                   ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            option?.option ?? '',
-                            style: GoogleFonts.itim(
-                              color: QRUtils.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Icon(
-                            selectedIndex == index
-                                ? Icons.keyboard_arrow_up
-                                : Icons.keyboard_arrow_down,
-                            color: QRUtils.white,
-                            size: 27,
-                          ),
-                        ],
-                      ),
-                      // selectedIndex == index
-                      //     ? const SizedBox()
-                      //     : const SizedBox(height: 20),
-                      AnimatedCrossFade(
-                        firstChild: const SizedBox.shrink(),
-                        secondChild: ListTile(
-                          title: Text(
-                            'Si',
-                            style: GoogleFonts.itim(
-                              color: QRUtils.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        crossFadeState: selectedIndex == index
-                            ? CrossFadeState.showSecond
-                            : CrossFadeState.showFirst,
-                        duration: const Duration(milliseconds: 1200),
-                        reverseDuration: Duration.zero,
-                        sizeCurve: Curves.fastLinearToSlowEaseIn,
-                      ),
-                    ],
+                ),
+                child: ListTile(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                    contactoModel = ContactoModel(
+                        nombre: contacto!.nombre,
+                        telefono: contacto!.telefono,
+                        idOpcion: option?.id);
+                    contact.callAdd(contactoModel);
+                  },
+                  title: Text(
+                    option?.option ?? '',
+                    style: GoogleFonts.itim(
+                      color: QRUtils.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               );

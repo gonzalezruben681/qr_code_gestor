@@ -7,11 +7,11 @@ class ContactUseCase {
 
   ContactUseCase({required this.contactoRepository});
 
-  Future<void> callAdd(Contacto contact) async {
+  Future<void> callAdd(ContactoModel contact) async {
     await contactoRepository.addContact(contact);
   }
 
-  Future<Contacto?> callScan(String contact) async {
+  Future<ContactoModel?> callScan(String contact) async {
     return await contactoRepository.scanQr(contact);
   }
 }
