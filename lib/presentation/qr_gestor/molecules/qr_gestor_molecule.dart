@@ -11,7 +11,6 @@ import 'package:qr_code_gestor/presentation/atoms/card_atom.dart';
 import 'package:qr_code_gestor/presentation/atoms/custom_input_atom.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 // ignore: must_be_immutable

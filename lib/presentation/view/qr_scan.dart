@@ -6,6 +6,6 @@ class QRScanWiew extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return QRScanTemplate();
+    return const QRScanTemplate();
   }
 }
