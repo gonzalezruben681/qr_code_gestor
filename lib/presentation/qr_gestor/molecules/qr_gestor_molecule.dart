@@ -23,12 +23,12 @@ class QRGestorMolecule extends HookWidget {
     'nombre': FormControl<String>(validators: [
       Validators.required,
       Validators.pattern(r'^[a-zA-ZñÑ,\sáéíóúÁÉÍÓÚ]+$'),
-    ], value: ''),
+    ]),
     'telefono': FormControl<String>(validators: [
       Validators.required,
       Validators.maxLength(10),
       Validators.pattern('[0-9]+'),
-    ], value: ''),
+    ]),
   });
 
   @override

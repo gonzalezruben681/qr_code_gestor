@@ -8,14 +8,14 @@ import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:qr_code_gestor/providers/option_provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-class AddOptionMolecule extends ConsumerStatefulWidget {
-  const AddOptionMolecule({super.key});
+class AddOptionMolecule2 extends ConsumerStatefulWidget {
+  const AddOptionMolecule2({super.key});
 
   @override
-  ConsumerState<AddOptionMolecule> createState() => _AddOptionMolecule2State();
+  ConsumerState<AddOptionMolecule2> createState() => _AddOptionMolecule2State();
 }
 
-class _AddOptionMolecule2State extends ConsumerState<AddOptionMolecule> {
+class _AddOptionMolecule2State extends ConsumerState<AddOptionMolecule2> {
   // validaciones del formulario
   final form = FormGroup({
     'opcion': FormControl<String>(validators: [

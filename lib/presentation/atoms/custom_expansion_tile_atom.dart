@@ -59,15 +59,6 @@ class _CustomExpansionTileAtomState extends State<CustomExpansionTileAtom> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Text(
-                //   option?.option ?? '',
-                //   style: GoogleFonts.itim(
-                //     color: QRUtils.white,
-                //     fontSize: 20,
-                //     fontWeight: FontWeight.w400,
-                //   ),
-                // ),
-
                 Text(
                   widget.text,
                   style: GoogleFonts.itim(
@@ -88,18 +79,20 @@ class _CustomExpansionTileAtomState extends State<CustomExpansionTileAtom> {
             // selectedIndex == index
             //     ? const SizedBox()
             //     : const SizedBox(height: 20),
-            AnimatedCrossFade(
-              firstChild: const SizedBox.shrink(),
-              secondChild: ListTile(
-                title: widget.title,
-                subtitle: widget.subtitle,
+            Expanded(
+              child: AnimatedCrossFade(
+                firstChild: const SizedBox.shrink(),
+                secondChild: ListTile(
+                  title: widget.title,
+                  subtitle: widget.subtitle,
+                ),
+                crossFadeState: selectedIndex == widget.index
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 1200),
+                reverseDuration: Duration.zero,
+                sizeCurve: Curves.fastLinearToSlowEaseIn,
               ),
-              crossFadeState: selectedIndex == widget.index
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-              duration: const Duration(milliseconds: 1200),
-              reverseDuration: Duration.zero,
-              sizeCurve: Curves.fastLinearToSlowEaseIn,
             ),
           ],
         ),

@@ -5,6 +5,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_code_gestor/domain/models/contacto.dart';
 import 'package:qr_code_gestor/domain/models/opcion.dart';
 import 'package:qr_code_gestor/helper/modal.dart';
+import 'package:qr_code_gestor/helper/snackbar_notification.dart';
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
 import 'package:qr_code_gestor/presentation/qr_scan/molecules/scan_molecule.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
@@ -55,7 +56,7 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
             Container(
               width: 290,
               height: 30,
-              padding: const EdgeInsets.symmetric(horizontal: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
@@ -97,81 +98,103 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
                           cameraController.stop();
                         } on Exception catch (e) {
                           // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('ah ocurrido un Error! $e'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
+                          SnackbarNotification.handleNotification(
+                              message: 'ah ocurrido un Error! $e',
+                              context: context,
+                              color: Colors.red);
                         }
                       },
                     );
                     try {
                       cameraController.start();
                     } on Exception catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('ah ocurrido un Error! $e'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
+                      SnackbarNotification.handleNotification(
+                          message: 'ah ocurrido un Error! $e',
+                          context: context,
+                          color: Colors.red);
                     }
                   },
                   icon: Icons.qr_code),
             ),
           ],
         ),
-        Container(
-          height: 200,
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: ListView.builder(
-            itemCount: _options?.length,
-            itemBuilder: (context, index) {
-              final option = _options?[index];
-              // return Text('Opción: ${option?.option}');
-              return Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                height: 50,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: QRUtils.greyBackground.withOpacity(0.5),
-                      blurRadius: 20,
-                      offset: const Offset(5, 5),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Text(
+                'Seleccione una opción:',
+                style: GoogleFonts.itim(fontSize: 20, color: QRUtils.white),
+              ),
+            ),
+            Container(
+              height: 200,
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: ListView.builder(
+                itemCount: _options?.length,
+                itemBuilder: (context, index) {
+                  final option = _options?[index];
+                  // return Text('Opción: ${option?.option}');
+                  return Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
                     ),
-                  ],
-                  color: QRUtils.greyBackground,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                child: ListTile(
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = index;
-                    });
-                    contactoModel = ContactoModel(
-                        nombre: contacto!.nombre,
-                        telefono: contacto!.telefono,
-                        idOpcion: option?.id);
-                    contact.callAdd(contactoModel);
-                  },
-                  title: Text(
-                    option?.option ?? '',
-                    style: GoogleFonts.itim(
-                      color: QRUtils.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: QRUtils.greyBackground.withOpacity(0.5),
+                          blurRadius: 20,
+                          offset: const Offset(5, 5),
+                        ),
+                      ],
+                      color: QRUtils.greyBackground,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
+                    child: ListTile(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                        if (contacto != null) {
+                          contactoModel = ContactoModel(
+                              nombre: contacto!.nombre,
+                              telefono: contacto!.telefono,
+                              idOpcion: option?.id);
+                          contact.callAdd(contactoModel);
+                          SnackbarNotification.handleNotification(
+                              message: 'Se agrego correctamente',
+                              context: context,
+                              color: Colors.greenAccent);
+                          contacto = null;
+                          qrstr.state = '';
+                        } else {
+                          SnackbarNotification.handleNotification(
+                              message:
+                                  'Por favor primero escanear el QR y luego seleccionar una opción',
+                              context: context,
+                              color: Colors.red);
+                        }
+                      },
+                      title: Text(
+                        option?.option ?? '',
+                        style: GoogleFonts.itim(
+                          color: QRUtils.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );
