@@ -52,7 +52,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
           vertical: 8,
         ),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        height: selectedIndex.value == index ? 108 : 50,
+        height: selectedIndex.value == index ? 330 : 50,
         curve: Curves.fastLinearToSlowEaseIn,
         duration: const Duration(milliseconds: 1200),
         decoration: BoxDecoration(
@@ -64,8 +64,8 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
             ),
           ],
           color: QRUtils.greyBackground,
-          borderRadius: BorderRadius.all(
-            Radius.circular(selectedIndex.value == index ? 10 : 20),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(20),
           ),
         ),
         child: Column(
@@ -90,48 +90,64 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
                 ),
               ],
             ),
-            // selectedIndex == index
+            // selectedIndex.value == index
             //     ? const SizedBox()
-            //     : const SizedBox(height: 20),
+            //     : const SizedBox(height: 40),
             Expanded(
               child: AnimatedCrossFade(
                 firstChild: const SizedBox.shrink(),
                 secondChild: SizedBox(
                   height: 120,
-                  child: ListView.builder(
-                    itemCount: contacts.value.length,
-                    itemBuilder: (context, index) {
-                      final contact = contacts.value[index];
-                      return ListTile(
-                        title: Row(
-                          children: [
-                            Text('Nombre: ',
-                                style: GoogleFonts.itim(
-                                  color: QRUtils.yellowBackground,
-                                )),
-                            Text(contact.nombre,
-                                style: GoogleFonts.itim(
-                                  color: QRUtils.white,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        margin: const EdgeInsets.only(top: 20),
+                        child: Text(
+                          'Lista de contactos:',
+                          style: GoogleFonts.itim(
+                              fontSize: 20, color: QRUtils.white),
                         ),
-                        subtitle: Row(
-                          children: [
-                            Text('Teléfono: ',
-                                style: GoogleFonts.itim(
-                                  color: QRUtils.yellowBackground,
-                                )),
-                            Text(
-                              contact.telefono,
-                              style: GoogleFonts.itim(
-                                color: QRUtils.white,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: contacts.value.length,
+                          itemBuilder: (context, index) {
+                            final contact = contacts.value[index];
+                            return ListTile(
+                              title: Row(
+                                children: [
+                                  Text('Nombre: ',
+                                      style: GoogleFonts.itim(
+                                        color: QRUtils.yellowBackground,
+                                      )),
+                                  Text(contact.nombre,
+                                      style: GoogleFonts.itim(
+                                        color: QRUtils.white,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ],
                               ),
-                            ),
-                          ],
+                              subtitle: Row(
+                                children: [
+                                  Text('Teléfono: ',
+                                      style: GoogleFonts.itim(
+                                        color: QRUtils.yellowBackground,
+                                      )),
+                                  Text(
+                                    contact.telefono,
+                                    style: GoogleFonts.itim(
+                                      color: QRUtils.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
                 ),
                 crossFadeState: selectedIndex.value == index
