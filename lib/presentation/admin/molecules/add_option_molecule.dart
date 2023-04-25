@@ -8,27 +8,24 @@ import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:qr_code_gestor/providers/option_provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-class AddOptionMolecule extends ConsumerStatefulWidget {
-  const AddOptionMolecule({super.key});
+class AddOptionMolecule extends HookConsumerWidget {
+  const AddOptionMolecule({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<AddOptionMolecule> createState() => _AddOptionMolecule2State();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final op = useState<List<OptionModel>>([]);
 
-class _AddOptionMolecule2State extends ConsumerState<AddOptionMolecule> {
-  // validaciones del formulario
-  final form = FormGroup({
-    'opcion': FormControl<String>(validators: [
-      Validators.required,
-      Validators.pattern(r'^[a-zA-ZñÑ,\sáéíóúÁÉÍÓÚ]+$'),
-    ]),
-  });
+    // validaciones del formulario
+    final form = FormGroup({
+      'opcion': FormControl<String>(validators: [
+        Validators.required,
+        Validators.pattern(r'^[a-zA-ZñÑ,\sáéíóúÁÉÍÓÚ]+$'),
+      ]),
+    });
 
-  final formkey = GlobalKey<FormState>();
+    final options = ref.watch(optionProvider);
+    // final opciones = options.getOptions();
 
-  @override
-  Widget build(BuildContext context) {
-    final options = ref.read(optionProvider);
     return ReactiveForm(
       formGroup: form,
       child: Column(

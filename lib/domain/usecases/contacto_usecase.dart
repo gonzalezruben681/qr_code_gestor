@@ -14,4 +14,8 @@ class ContactUseCase {
   Future<ContactoModel?> callScan(String contact) async {
     return await contactoRepository.scanQr(contact);
   }
+
+  Stream<List<ContactoModel>> getContacts() async* {
+    yield* contactoRepository.getContacts();
+  }
 }

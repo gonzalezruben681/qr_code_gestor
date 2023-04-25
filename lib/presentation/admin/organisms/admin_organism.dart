@@ -1,37 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:qr_code_gestor/domain/models/opcion.dart';
+
 import 'package:qr_code_gestor/presentation/admin/molecules/add_option_molecule.dart';
+import 'package:qr_code_gestor/presentation/admin/molecules/custom_expansion_tile_admin.dart';
 import 'package:qr_code_gestor/presentation/atoms/card_atom.dart';
-import 'package:qr_code_gestor/presentation/atoms/custom_expansion_tile_atom.dart';
+
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:qr_code_gestor/providers/option_provider.dart';
 
-class AdminOrganism extends ConsumerStatefulWidget {
-  const AdminOrganism({super.key});
+class AdminOrganism extends HookConsumerWidget {
+  const AdminOrganism({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<AdminOrganism> createState() => _AdminOrganismState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final optionsStream = ref.watch(optionProvider).getOptions();
+    final optionsState = useStream(optionsStream, initialData: const []);
 
-class _AdminOrganismState extends ConsumerState<AdminOrganism> {
-  Stream<List<OptionModel>>? _optionsStream;
-  List<OptionModel>? _options;
-
-  @override
-  void initState() {
-    super.initState();
-    _optionsStream = ref.read(optionProvider).getOptions();
-    _optionsStream?.listen((optionsList) {
-      setState(() {
-        _options = optionsList;
-      });
-    });
-  }
-
-  int? selectedIndex;
-  @override
-  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -43,11 +28,11 @@ class _AdminOrganismState extends ConsumerState<AdminOrganism> {
           height: 200,
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: ListView.builder(
-            itemCount: _options?.length,
+            itemCount: optionsState.data?.length,
             itemBuilder: (context, index) {
-              final option = _options?[index];
-              return CustomExpansionTileAtom(
-                text: option?.option ?? '',
+              final option = optionsState.data?[index];
+              return ContactExpansionTileMolecule(
+                option: option,
                 index: index,
               );
             },

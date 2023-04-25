@@ -31,13 +31,12 @@ class ContactRepositoryImpl implements ContactoRepository {
   }
 
   @override
-  Future<List<ContactoModel>> getContacts() async {
+  Stream<List<ContactoModel>> getContacts() {
     final userCollection = _firestore.collection('contactos');
-    final queryContact = await userCollection.get();
-    return queryContact.docs.map((doc) {
-      final data = doc.data();
-      return ContactoModel.fromJson(data);
-    }).toList();
+    final stream = userCollection.snapshots();
+    return stream.map((snapshot) => snapshot.docs
+        .map((doc) => ContactoModel.fromJson(doc.data()))
+        .toList());
   }
 
   @override

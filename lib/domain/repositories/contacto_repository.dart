@@ -4,6 +4,6 @@ abstract class ContactoRepository {
   Future<void> addContact(ContactoModel contact);
   Future<void> updateContact(ContactoModel contact);
   Future<void> deleteContact(ContactoModel contact);
-  Future<List<ContactoModel>> getContacts();
+  Stream<List<ContactoModel>> getContacts();
   Future<ContactoModel?> scanQr(String qrstr);
 }

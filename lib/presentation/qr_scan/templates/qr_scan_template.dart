@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -13,42 +14,42 @@ import 'package:qr_code_gestor/providers/contact_provider.dart';
 import 'package:qr_code_gestor/providers/option_provider.dart';
 
 // ignore: must_be_immutable
-class QRScanTemplate extends ConsumerStatefulWidget {
-  const QRScanTemplate({super.key});
+class QRScanTemplate extends HookConsumerWidget {
+  QRScanTemplate({super.key});
 
-  @override
-  ConsumerState<QRScanTemplate> createState() => _QRScanTemplateState();
-}
-
-class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
-  BarcodeCapture? barcode;
   ContactoModel? contacto;
-
-  Stream<List<OptionModel>>? _optionsStream;
-  List<OptionModel>? _options;
-
   final MobileScannerController cameraController = MobileScannerController();
-
-  @override
-  void initState() {
-    super.initState();
-    _optionsStream = ref.read(optionProvider).getOptions();
-    _optionsStream?.listen((optionsList) {
-      setState(() {
-        _options = optionsList;
-      });
-    });
-  }
-
-  int? selectedIndex;
   late ContactoModel contactoModel;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final qrstr = ref.read(contactDataProvider.notifier);
     final contact = ref.read(contactProvider);
+    final barcodeState = useState<BarcodeCapture?>(null);
+    final selectedIndex = useState<int?>(null);
+    final contactos = useState<List<ContactoModel>>([]);
+    final options = useState<List<OptionModel>>([]);
+    final optionsStream = ref.read(optionProvider).getOptions();
+    final contactStream = ref.read(contactProvider).getContacts();
+
+    useEffect(() {
+      final subOpcion = optionsStream.listen((optionsList) {
+        options.value = optionsList;
+      });
+
+      final subContacto = contactStream.listen((contactsList) {
+        contactos.value = contactsList;
+      });
+
+      return () {
+        cameraController.dispose();
+        subOpcion.cancel;
+        subContacto.cancel;
+      };
+    }, []);
+
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Column(
@@ -84,9 +85,7 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
                       content: ScanMolecule(
                         cameraController: cameraController,
                         onDetect: (barcode) async {
-                          setState(() {
-                            this.barcode = barcode;
-                          });
+                          barcodeState.value = barcode;
                           qrstr.state = barcode.barcodes.first.rawValue ?? '';
                           contacto = await contact.callScan(qrstr.state);
                         },
@@ -118,6 +117,7 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
             ),
           ],
         ),
+        const SizedBox(height: 20),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -132,9 +132,9 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
               height: 200,
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: ListView.builder(
-                itemCount: _options?.length,
+                itemCount: options.value.length,
                 itemBuilder: (context, index) {
-                  final option = _options?[index];
+                  final option = options.value[index];
                   // return Text('Opción: ${option?.option}');
                   return Container(
                     margin: const EdgeInsets.symmetric(
@@ -158,21 +158,28 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
                     ),
                     child: ListTile(
                       onTap: () {
-                        setState(() {
-                          selectedIndex = index;
-                        });
+                        selectedIndex.value = index;
                         if (contacto != null) {
                           contactoModel = ContactoModel(
                               nombre: contacto!.nombre,
                               telefono: contacto!.telefono,
-                              idOpcion: option?.id);
-                          contact.callAdd(contactoModel);
-                          SnackbarNotification.handleNotification(
-                              message: 'Se agrego correctamente',
-                              context: context,
-                              color: Colors.greenAccent);
-                          contacto = null;
-                          qrstr.state = '';
+                              idOpcion: option.id);
+                          if (contactos.value.any((contact) =>
+                              contact.nombre == contacto?.nombre &&
+                              contact.idOpcion == option.id)) {
+                            SnackbarNotification.handleNotification(
+                                message: 'Este contacto ya existe',
+                                context: context,
+                                color: Colors.red);
+                          } else {
+                            contact.callAdd(contactoModel);
+                            SnackbarNotification.handleNotification(
+                                message: 'Se agrego correctamente',
+                                context: context,
+                                color: Colors.greenAccent);
+                            contacto = null;
+                            qrstr.state = '';
+                          }
                         } else {
                           SnackbarNotification.handleNotification(
                               message:
@@ -182,7 +189,7 @@ class _QRScanTemplateState extends ConsumerState<QRScanTemplate> {
                         }
                       },
                       title: Text(
-                        option?.option ?? '',
+                        option.option,
                         style: GoogleFonts.itim(
                           color: QRUtils.white,
                           fontSize: 20,

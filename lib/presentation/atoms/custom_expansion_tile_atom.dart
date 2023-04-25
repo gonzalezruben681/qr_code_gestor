@@ -3,12 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 
 class CustomExpansionTileAtom extends StatefulWidget {
-  const CustomExpansionTileAtom(
-      {super.key, this.index, required this.text, this.title, this.subtitle});
+  const CustomExpansionTileAtom({
+    super.key,
+    this.index,
+    required this.text,
+    required this.secondChild,
+    required this.onTap,
+  });
   final int? index;
   final String text;
-  final Widget? title;
-  final Widget? subtitle;
+  final Widget secondChild;
+  final Function()? onTap;
 
   @override
   State<CustomExpansionTileAtom> createState() =>
@@ -82,10 +87,7 @@ class _CustomExpansionTileAtomState extends State<CustomExpansionTileAtom> {
             Expanded(
               child: AnimatedCrossFade(
                 firstChild: const SizedBox.shrink(),
-                secondChild: ListTile(
-                  title: widget.title,
-                  subtitle: widget.subtitle,
-                ),
+                secondChild: widget.secondChild,
                 crossFadeState: selectedIndex == widget.index
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
