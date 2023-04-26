@@ -46,7 +46,8 @@ void mostrarModal(
     String? titulo,
     Widget? content,
     Color? backgroundColor,
-    required dynamic Function()? onPressed}) {
+    required dynamic Function()? onPressed,
+    String? text}) {
   showDialog(
     context: context,
     builder: (context) => PlaceholderDialog(
@@ -60,7 +61,7 @@ void mostrarModal(
               fontSize: 20,
             ),
             onPressed: onPressed,
-            text: 'Aceptar'),
+            text: text ?? 'Aceptar'),
       ],
     ),
   );

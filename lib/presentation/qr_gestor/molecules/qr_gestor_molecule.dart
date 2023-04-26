@@ -18,8 +18,7 @@ class QRGestorMolecule extends HookWidget {
   QRGestorMolecule({super.key});
   String? nombre;
   String? telefono;
-
-  final FormGroup form = FormGroup({
+  final form = FormGroup({
     'nombre': FormControl<String>(validators: [
       Validators.required,
       Validators.pattern(r'^[a-zA-ZñÑ,\sáéíóúÁÉÍÓÚ]+$'),

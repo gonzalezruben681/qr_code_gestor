@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_code_gestor/domain/models/contacto.dart';
 import 'package:qr_code_gestor/domain/models/opcion.dart';
+import 'package:qr_code_gestor/helper/modal.dart';
+import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:qr_code_gestor/providers/contact_provider.dart';
 
@@ -51,7 +53,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
           horizontal: selectedIndex.value == index ? 12 : 0,
           vertical: 8,
         ),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         height: selectedIndex.value == index ? 330 : 50,
         curve: Curves.fastLinearToSlowEaseIn,
         duration: const Duration(milliseconds: 1200),
@@ -73,26 +75,52 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  option?.option ?? '',
-                  style: GoogleFonts.itim(
-                    color: QRUtils.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
+                Expanded(
+                  child: Text(
+                    option?.option ?? '',
+                    style: GoogleFonts.itim(
+                      color: QRUtils.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
-                Icon(
-                  selectedIndex.value == index
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                  color: QRUtils.white,
-                  size: 27,
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        mostrarModal(
+                          context: context,
+                          onPressed: () {},
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.edit_document,
+                        color: QRUtils.white,
+                      ),
+                      tooltip: 'Editar',
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        modalOptions(context);
+                      },
+                      icon: const Icon(
+                        Icons.delete_forever,
+                        color: QRUtils.white,
+                      ),
+                      tooltip: 'Borrar',
+                    ),
+                    Icon(
+                      selectedIndex.value == index
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: QRUtils.white,
+                      size: 27,
+                    ),
+                  ],
                 ),
               ],
             ),
-            // selectedIndex.value == index
-            //     ? const SizedBox()
-            //     : const SizedBox(height: 40),
             Expanded(
               child: AnimatedCrossFade(
                 firstChild: const SizedBox.shrink(),
@@ -160,6 +188,61 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<dynamic> modalOptions(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        icon: const Icon(
+          Icons.delete_forever,
+          color: Colors.redAccent,
+          size: 30,
+        ),
+        backgroundColor: QRUtils.greyBackground,
+        title: Text('Eliminar opción',
+            style: GoogleFonts.itim(
+                color: QRUtils.yellowBackground,
+                fontSize: 20,
+                fontWeight: FontWeight.bold)),
+        content: Text('¿Deseas eliminar esta opción?',
+            style: GoogleFonts.itim(
+              color: QRUtils.white,
+              fontSize: 20,
+            )),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: Text(
+                  'Cancelar',
+                  style: GoogleFonts.itim(
+                    color: QRUtils.yellowBackground,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 5),
+              CustomButtonAtom(
+                text: 'Aceptar',
+                style: GoogleFonts.itim(
+                  color: QRUtils.greyBackground,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
+                onPressed: () {},
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

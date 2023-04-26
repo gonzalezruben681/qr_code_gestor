@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:qr_code_gestor/presentation/admin/molecules/add_option_molecule.dart';
 import 'package:qr_code_gestor/presentation/admin/molecules/custom_expansion_tile_admin.dart';
-import 'package:qr_code_gestor/presentation/atoms/card_atom.dart';
-
-import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:qr_code_gestor/providers/option_provider.dart';
 
 class AdminOrganism extends HookConsumerWidget {
@@ -20,10 +16,6 @@ class AdminOrganism extends HookConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const CardAtom(
-          color: QRUtils.greyBackground,
-          child: AddOptionMolecule(),
-        ),
         Container(
           height: 200,
           padding: const EdgeInsets.symmetric(horizontal: 30),
