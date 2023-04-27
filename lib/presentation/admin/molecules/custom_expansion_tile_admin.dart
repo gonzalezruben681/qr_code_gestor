@@ -6,15 +6,18 @@ import 'package:qr_code_gestor/domain/models/contacto.dart';
 import 'package:qr_code_gestor/domain/models/opcion.dart';
 import 'package:qr_code_gestor/helper/modal.dart';
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
+import 'package:qr_code_gestor/presentation/atoms/custom_input_atom.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:qr_code_gestor/providers/contact_provider.dart';
+import 'package:qr_code_gestor/providers/option_provider.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 class ContactExpansionTileMolecule extends HookConsumerWidget {
   const ContactExpansionTileMolecule({
-    Key? key,
+    super.key,
     this.index,
     required this.option,
-  }) : super(key: key);
+  });
   final int? index;
   final OptionModel? option;
 
@@ -23,12 +26,24 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
     final selectedIndex = useState<int?>(null);
     final contacts = useState<List<ContactoModel>>([]);
     final contactsStream = ref.watch(contactProvider).getContacts();
+    final options = ref.watch(optionProvider);
+
+    // validaciones del formulario
+    final form = fb.group(<String, Object>{
+      'opcion': FormControl<String>(validators: [
+        Validators.required,
+        Validators.pattern(r'^[a-zA-ZñÑ,\sáéíóúÁÉÍÓÚ]+$'),
+      ], value: option?.option),
+    });
 
     useEffect(() {
       final subscription = contactsStream.listen((contactos) {
         contacts.value = contactos;
       });
-      return subscription.cancel;
+
+      return () {
+        subscription.cancel;
+      };
     }, []);
 
     void filterContactsByOption(String idOpcion) {
@@ -90,9 +105,58 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
                     IconButton(
                       onPressed: () {
                         mostrarModal(
-                          context: context,
-                          onPressed: () {},
-                        );
+                            context: context,
+                            backgroundColor: QRUtils.greyBackground,
+                            onPressed: () async {
+                              if (form.invalid) {
+                                form.markAllAsTouched();
+                                return;
+                              }
+                              await options.updateOption(OptionModel(
+                                  id: option!.id,
+                                  option: form.control('opcion').value!));
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                            },
+                            content: SizedBox(
+                              height: 150,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Editar opción',
+                                    style: GoogleFonts.itim(
+                                      color: QRUtils.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  ReactiveForm(
+                                    formGroup: form,
+                                    child: Column(
+                                      children: [
+                                        CustomInputAtom(
+                                          formControlName: 'opcion',
+                                          placeholder:
+                                              'Ingrese la opción a editar',
+                                          enabled: true,
+                                          style: GoogleFonts.itim(
+                                            fontSize: 20,
+                                          ),
+                                          validationMessages: {
+                                            ValidationMessage.required:
+                                                (error) =>
+                                                    'Este campo es requerido',
+                                            ValidationMessage.pattern: (errror) =>
+                                                'Solo se permiten letras, comas y espacios',
+                                          },
+                                        ),
+                                        const SizedBox(height: 10),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ));
                       },
                       icon: const Icon(
                         Icons.edit_document,

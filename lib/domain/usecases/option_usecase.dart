@@ -13,4 +13,8 @@ class OptionUsecase {
   Stream<List<OptionModel>> getOptions() async* {
     yield* optionRepository.getOptions();
   }
+
+  Future<void> updateOption(OptionModel option) async {
+    return await optionRepository.updateOption(option);
+  }
 }

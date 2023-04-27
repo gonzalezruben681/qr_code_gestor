@@ -34,22 +34,9 @@ class OptionRepositoryImpl extends OptionRepository {
             .toList());
   }
 
-  // @override
-  // Future<List<OptionModel>> getOptions() async {
-  //   // List<OptionModel> options = [];
-  //   final optionsCollection = _firestore.collection('opciones');
-  //   final optionsSnapshot = await optionsCollection.get();
-
-  //   final optionsList = optionsSnapshot.docs
-  //       .map((doc) => OptionModel.fromJson({'id': doc.id, ...doc.data()}))
-  //       .toList();
-
-  //   return optionsList;
-  // }
-
   @override
-  Future<void> updateOption(OptionModel option) {
-    // TODO: implement updateOption
-    throw UnimplementedError();
+  Future<void> updateOption(OptionModel option) async {
+    final userCollection = _firestore.collection('opciones');
+    await userCollection.doc(option.id).update({'opcion': option.option});
   }
 }
