@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_code_gestor/domain/models/contacto.dart';
 import 'package:qr_code_gestor/domain/models/opcion.dart';
 import 'package:qr_code_gestor/helper/modal.dart';
+import 'package:qr_code_gestor/helper/snackbar_notification.dart';
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
 import 'package:qr_code_gestor/presentation/atoms/custom_input_atom.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
@@ -25,8 +26,11 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = useState<int?>(null);
     final contacts = useState<List<ContactoModel>>([]);
+    final contact = ref.read(contactProvider);
     final contactsStream = ref.watch(contactProvider).getContacts();
     final options = ref.watch(optionProvider);
+    late bool contactoRes;
+    late bool opcion;
 
     // validaciones del formulario
     final form = fb.group(<String, Object>{
@@ -42,7 +46,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
       });
 
       return () {
-        subscription.cancel;
+        subscription.cancel();
       };
     }, []);
 
@@ -166,7 +170,40 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        modalOptions(context);
+                        modalOptions(
+                          context: context,
+                          text: '¿Deseas eliminar la opción ${option?.option}?',
+                          onPressedAceptar: () async {
+                            final contacto = contacts.value
+                                .where(
+                                    (contact) => contact.idOpcion == option?.id)
+                                .toList();
+                            for (var contacto in contacto) {
+                              contactoRes =
+                                  await contact.deleteContact(contacto);
+                            }
+                            opcion = await options.deleteOption(option!);
+
+                            if (opcion && contactoRes) {
+                              // ignore: use_build_context_synchronously
+                              SnackbarNotification.handleNotification(
+                                  context: context,
+                                  message: 'Se elimino correctamente la opción',
+                                  color: Colors.greenAccent);
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              SnackbarNotification.handleNotification(
+                                  context: context,
+                                  message:
+                                      'Hubo un error al eliminar la opción, intente de nuevo',
+                                  color: Colors.red);
+                            }
+                          },
+                          onPressedCancelar: () =>
+                              Navigator.pop(context, 'Cancel'),
+                        );
                       },
                       icon: const Icon(
                         Icons.delete_forever,
@@ -189,7 +226,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
               child: AnimatedCrossFade(
                 firstChild: const SizedBox.shrink(),
                 secondChild: SizedBox(
-                  height: 120,
+                  height: 200,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -256,7 +293,13 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
     );
   }
 
-  Future<dynamic> modalOptions(BuildContext context) {
+  Future<dynamic> modalOptions({
+    required BuildContext context,
+    String? text,
+    String? title,
+    required Function()? onPressedAceptar,
+    required Function()? onPressedCancelar,
+  }) {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -269,12 +312,12 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
           size: 30,
         ),
         backgroundColor: QRUtils.greyBackground,
-        title: Text('Eliminar opción',
+        title: Text(title ?? 'Eliminar opción',
             style: GoogleFonts.itim(
                 color: QRUtils.yellowBackground,
                 fontSize: 20,
                 fontWeight: FontWeight.bold)),
-        content: Text('¿Deseas eliminar esta opción?',
+        content: Text(text ?? '¿Deseas eliminar esta opción?',
             style: GoogleFonts.itim(
               color: QRUtils.white,
               fontSize: 20,
@@ -284,7 +327,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                onPressed: () => Navigator.pop(context, 'Cancel'),
+                onPressed: onPressedCancelar,
                 child: Text(
                   'Cancelar',
                   style: GoogleFonts.itim(
@@ -302,7 +345,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
                   fontSize: 20,
                   fontWeight: FontWeight.w400,
                 ),
-                onPressed: () {},
+                onPressed: onPressedAceptar,
               ),
             ],
           )

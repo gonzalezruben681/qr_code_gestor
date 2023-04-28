@@ -7,8 +7,8 @@ class ContactUseCase {
 
   ContactUseCase({required this.contactoRepository});
 
-  Future<void> callAdd(ContactoModel contact) async {
-    await contactoRepository.addContact(contact);
+  Future<void> addContact(ContactoModel contact) async {
+    return await contactoRepository.addContact(contact);
   }
 
   Future<ContactoModel?> callScan(String contact) async {
@@ -17,5 +17,9 @@ class ContactUseCase {
 
   Stream<List<ContactoModel>> getContacts() async* {
     yield* contactoRepository.getContacts();
+  }
+
+  Future<bool> deleteContact(ContactoModel contact) async {
+    return await contactoRepository.deleteContact(contact);
   }
 }

@@ -17,4 +17,8 @@ class OptionUsecase {
   Future<void> updateOption(OptionModel option) async {
     return await optionRepository.updateOption(option);
   }
+
+  Future<bool> deleteOption(OptionModel option) async {
+    return await optionRepository.deleteOption(option);
+  }
 }

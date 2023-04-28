@@ -17,17 +17,23 @@ class ContactRepositoryImpl implements ContactoRepository {
 
   @override
   Future<void> updateContact(ContactoModel contact) async {
-    // final userDoc = firestore.collection('contactos').doc(contact.id);
-    // await userDoc.update({
-    //   'name': user.name,
-    //   'age': user.age,
-    // });
+    final userCollection = _firestore.collection('contactos');
+    await userCollection
+        .doc(contact.id)
+        .update({'nombre': contact.nombre, 'telefono': contact.telefono});
   }
 
   @override
-  Future<void> deleteContact(ContactoModel contact) async {
-    final userDoc = _firestore.collection('contactos').doc(contact.id);
-    await userDoc.delete();
+  Future<bool> deleteContact(ContactoModel contact) async {
+    final optionsCollection = _firestore.collection('contactos');
+    try {
+      await optionsCollection.doc(contact.id).delete();
+      return true;
+    } on FirebaseException {
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
@@ -35,7 +41,7 @@ class ContactRepositoryImpl implements ContactoRepository {
     final userCollection = _firestore.collection('contactos');
     final stream = userCollection.snapshots();
     return stream.map((snapshot) => snapshot.docs
-        .map((doc) => ContactoModel.fromJson(doc.data()))
+        .map((doc) => ContactoModel.fromJson({'id': doc.id, ...doc.data()}))
         .toList());
   }
 

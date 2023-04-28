@@ -6,9 +6,9 @@ class OptionRepositoryImpl extends OptionRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   @override
   Future<bool> addOption(String option) async {
-    final userCollection = _firestore.collection('opciones');
+    final optionsCollection = _firestore.collection('opciones');
     try {
-      await userCollection.add({
+      await optionsCollection.add({
         'opcion': option,
       });
       return true;
@@ -20,9 +20,16 @@ class OptionRepositoryImpl extends OptionRepository {
   }
 
   @override
-  Future<void> deleteOption(OptionModel option) {
-    // TODO: implement deleteOption
-    throw UnimplementedError();
+  Future<bool> deleteOption(OptionModel option) async {
+    final optionsCollection = _firestore.collection('opciones');
+    try {
+      await optionsCollection.doc(option.id).delete();
+      return true;
+    } on FirebaseException {
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override

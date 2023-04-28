@@ -18,14 +18,17 @@ class QRScanTemplate extends HookConsumerWidget {
   QRScanTemplate({super.key});
 
   ContactoModel? contacto;
-  final MobileScannerController cameraController = MobileScannerController();
+
   late ContactoModel contactoModel;
+  final nameController = TextEditingController();
+  final MobileScannerController cameraController = MobileScannerController(
+    torchEnabled: true,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final qrstr = ref.read(contactDataProvider.notifier);
+    final qrstr = ref.watch(contactDataProvider.notifier);
     final contact = ref.read(contactProvider);
-    final barcodeState = useState<BarcodeCapture?>(null);
     final selectedIndex = useState<int?>(null);
     final contactos = useState<List<ContactoModel>>([]);
     final options = useState<List<OptionModel>>([]);
@@ -43,8 +46,8 @@ class QRScanTemplate extends HookConsumerWidget {
 
       return () {
         cameraController.dispose();
-        subOpcion.cancel;
-        subContacto.cancel;
+        subOpcion.cancel();
+        subContacto.cancel();
       };
     }, []);
 
@@ -55,22 +58,42 @@ class QRScanTemplate extends HookConsumerWidget {
         Column(
           children: [
             Container(
-              width: 290,
-              height: 30,
-              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: QRUtils.white,
-                  width: 0.50,
+                height: 40,
+                width: 300,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
                 ),
-                color: QRUtils.greyBackground,
-              ),
-              child: Text(
-                'nombre: ${contacto?.nombre ?? ''}',
-                style: GoogleFonts.itim(fontSize: 15, color: QRUtils.white),
-              ),
-            ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: QRUtils.white,
+                    width: 0.50,
+                  ),
+                  color: QRUtils.greyBackground,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Nombre:',
+                      style: GoogleFonts.itim(
+                          fontSize: 15, color: QRUtils.yellowBackground),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: TextField(
+                          controller: nameController,
+                          enabled: false,
+                          style: GoogleFonts.itim(
+                              fontSize: 15, color: QRUtils.white),
+                          decoration:
+                              const InputDecoration(border: InputBorder.none),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -82,36 +105,26 @@ class QRScanTemplate extends HookConsumerWidget {
                   onPressed: () {
                     mostrarModal(
                       context: context,
-                      content: ScanMolecule(
-                        cameraController: cameraController,
-                        onDetect: (barcode) async {
-                          barcodeState.value = barcode;
-                          qrstr.state = barcode.barcodes.first.rawValue ?? '';
-                          contacto = await contact.callScan(qrstr.state);
-                        },
-                      ),
+                      content: ScanMolecule(),
                       backgroundColor: QRUtils.white,
                       onPressed: () async {
-                        Navigator.of(context).pop();
-                        try {
-                          cameraController.stop();
-                        } on Exception catch (e) {
-                          // ignore: use_build_context_synchronously
-                          SnackbarNotification.handleNotification(
-                              message: 'ah ocurrido un Error! $e',
-                              context: context,
-                              color: Colors.red);
+                        Navigator.pop(context);
+
+                        if (qrstr.state.isNotEmpty) {
+                          Map<String, dynamic> mapa =
+                              Map.fromEntries(qrstr.state.split(',').map((s) {
+                            final List<String> parts = s.trim().split(':');
+                            return MapEntry(parts[0], parts[1]);
+                          }));
+                          contacto = ContactoModel.fromJson(mapa);
+                          nameController.text = contacto!.nombre;
+                          qrstr.state = '';
+                          // Parsear el mensaje para obtener un mapa
+                        } else {
+                          return null;
                         }
                       },
                     );
-                    try {
-                      cameraController.start();
-                    } on Exception catch (e) {
-                      SnackbarNotification.handleNotification(
-                          message: 'ah ocurrido un Error! $e',
-                          context: context,
-                          color: Colors.red);
-                    }
                   },
                   icon: Icons.qr_code),
             ),
@@ -135,7 +148,6 @@ class QRScanTemplate extends HookConsumerWidget {
                 itemCount: options.value.length,
                 itemBuilder: (context, index) {
                   final option = options.value[index];
-                  // return Text('Opción: ${option?.option}');
                   return Container(
                     margin: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -157,7 +169,7 @@ class QRScanTemplate extends HookConsumerWidget {
                       ),
                     ),
                     child: ListTile(
-                      onTap: () {
+                      onTap: () async {
                         selectedIndex.value = index;
                         if (contacto != null) {
                           contactoModel = ContactoModel(
@@ -172,13 +184,15 @@ class QRScanTemplate extends HookConsumerWidget {
                                 context: context,
                                 color: Colors.red);
                           } else {
-                            contact.callAdd(contactoModel);
+                            await contact.addContact(contactoModel);
+                            // ignore: use_build_context_synchronously
                             SnackbarNotification.handleNotification(
                                 message: 'Se agrego correctamente',
                                 context: context,
                                 color: Colors.greenAccent);
-                            contacto = null;
                             qrstr.state = '';
+                            contacto = null;
+                            nameController.clear();
                           }
                         } else {
                           SnackbarNotification.handleNotification(
