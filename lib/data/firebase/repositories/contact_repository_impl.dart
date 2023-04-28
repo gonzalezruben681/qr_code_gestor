@@ -44,20 +44,4 @@ class ContactRepositoryImpl implements ContactoRepository {
         .map((doc) => ContactoModel.fromJson({'id': doc.id, ...doc.data()}))
         .toList());
   }
-
-  @override
-  Future<ContactoModel?> scanQr(String qrstr) async {
-    if (qrstr.isNotEmpty) {
-      Map<String, dynamic> mapa = Map.fromEntries(qrstr.split(',').map((s) {
-        final List<String> parts = s.trim().split(':');
-        return MapEntry(parts[0], parts[1]);
-      }));
-
-      // Crear un nuevo objeto de la clase Contacto a partir del mapa
-      return ContactoModel.fromJson(mapa);
-      // Parsear el mensaje para obtener un mapa
-    } else {
-      return null;
-    }
-  }
 }

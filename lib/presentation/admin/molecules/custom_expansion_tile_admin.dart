@@ -72,7 +72,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
           horizontal: selectedIndex.value == index ? 12 : 0,
           vertical: 8,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         height: selectedIndex.value == index ? 330 : 50,
         curve: Curves.fastLinearToSlowEaseIn,
         duration: const Duration(milliseconds: 1200),
@@ -233,10 +233,20 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         margin: const EdgeInsets.only(top: 20),
-                        child: Text(
-                          'Lista de contactos:',
-                          style: GoogleFonts.itim(
-                              fontSize: 20, color: QRUtils.white),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Lista de contactos:',
+                              style: GoogleFonts.itim(
+                                  fontSize: 20, color: QRUtils.white),
+                            ),
+                            Text(
+                              '${contacts.value.length}',
+                              style: GoogleFonts.itim(
+                                  fontSize: 20, color: QRUtils.white),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
