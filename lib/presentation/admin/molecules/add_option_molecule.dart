@@ -62,6 +62,7 @@ class AddOptionMolecule extends HookConsumerWidget {
                   GoogleFonts.itim(fontSize: 20, color: QRUtils.greyBackground),
               text: 'Agregar',
               onPressed: () async {
+                FocusScope.of(context).unfocus();
                 if (form.invalid) {
                   form.markAllAsTouched();
                   return;
@@ -73,7 +74,7 @@ class AddOptionMolecule extends HookConsumerWidget {
                   SnackbarNotification.handleNotification(
                       message: 'Esa opción ya existe',
                       context: context,
-                      color: Colors.red);
+                      color: Colors.red[300]);
                   return;
                 }
                 final opction = await options.addOption(opcion);
@@ -82,7 +83,7 @@ class AddOptionMolecule extends HookConsumerWidget {
                   SnackbarNotification.handleNotification(
                       context: context,
                       message: 'Se agrego correctamente la opción',
-                      color: Colors.greenAccent);
+                      color: QRUtils.greyBackground);
                   form.control('opcion').reset();
                 } else {
                   // ignore: use_build_context_synchronously

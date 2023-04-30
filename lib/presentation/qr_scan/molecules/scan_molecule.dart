@@ -46,7 +46,7 @@ class ScanMolecule extends HookConsumerWidget {
     // }
 
     return SizedBox(
-      height: 315,
+      height: 325,
       child: Column(
         children: [
           Stack(

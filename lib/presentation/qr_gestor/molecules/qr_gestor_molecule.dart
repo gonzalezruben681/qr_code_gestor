@@ -104,6 +104,7 @@ class QRGestorMolecule extends HookWidget {
   }
 
   Future<void> exportPng(BuildContext context) async {
+    FocusScope.of(context).unfocus();
     // validar el formulario antes de continuar
     if (form.invalid) {
       form.markAllAsTouched();

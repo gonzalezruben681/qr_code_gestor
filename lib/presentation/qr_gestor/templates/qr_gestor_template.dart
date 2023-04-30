@@ -6,8 +6,6 @@ class QRGestorTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: QRGestorOrganism(),
-    );
+    return const QRGestorOrganism();
   }
 }

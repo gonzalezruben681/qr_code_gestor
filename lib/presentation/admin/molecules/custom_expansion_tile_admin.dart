@@ -29,7 +29,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
     final contact = ref.read(contactProvider);
     final contactsStream = ref.watch(contactProvider).getContacts();
     final options = ref.watch(optionProvider);
-    late bool contactoRes;
+    // bool contactoRes = false;
     late bool opcion;
 
     // validaciones del formulario
@@ -174,31 +174,32 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
                           context: context,
                           text: '¿Deseas eliminar la opción ${option?.option}?',
                           onPressedAceptar: () async {
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+
                             final contacto = contacts.value
                                 .where(
                                     (contact) => contact.idOpcion == option?.id)
                                 .toList();
                             for (var contacto in contacto) {
-                              contactoRes =
-                                  await contact.deleteContact(contacto);
+                              // contactoRes =
+                              await contact.deleteContact(contacto);
                             }
                             opcion = await options.deleteOption(option!);
 
-                            if (opcion && contactoRes) {
+                            if (opcion) {
                               // ignore: use_build_context_synchronously
                               SnackbarNotification.handleNotification(
                                   context: context,
                                   message: 'Se elimino correctamente la opción',
-                                  color: Colors.greenAccent);
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
+                                  color: QRUtils.greyBackground);
                             } else {
                               // ignore: use_build_context_synchronously
                               SnackbarNotification.handleNotification(
                                   context: context,
                                   message:
                                       'Hubo un error al eliminar la opción, intente de nuevo',
-                                  color: Colors.red);
+                                  color: Colors.red[300]);
                             }
                           },
                           onPressedCancelar: () =>

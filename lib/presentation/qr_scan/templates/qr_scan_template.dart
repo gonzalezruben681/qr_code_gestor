@@ -109,7 +109,6 @@ class QRScanTemplate extends HookConsumerWidget {
                       backgroundColor: QRUtils.white,
                       onPressed: () async {
                         Navigator.pop(context);
-
                         if (qrstr.state.isNotEmpty) {
                           Map<String, dynamic> mapa =
                               Map.fromEntries(qrstr.state.split(',').map((s) {
