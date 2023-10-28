@@ -114,22 +114,22 @@ class QRGestorMolecule extends HookWidget {
     nombre = form.control('nombre').value!;
     telefono = form.control('telefono').value!;
 
-    final image = im.Image(250, 250);
-    im.fill(image, im.getColor(255, 255, 255));
+    final image = im.Image(height: 250, width: 250);
+    im.fill(image, color: im.ColorFloat16.rgb(255, 255, 255));
     drawBarcode(image, Barcode.qrCode(),
         'nombre: ${nombre!.trim()}, telefono: ${telefono!.trim()}',
-        font: im.arial_48);
+        font: im.arial48);
     final data = im.encodePng(image);
     if (kIsWeb) {
       final fileName = '$nombre.png';
-      final path = await getSavePath(suggestedName: fileName);
-      if (path != null) {
+      final location = await getSaveLocation(suggestedName: fileName);
+      if (location != null) {
         final file = XFile.fromData(
           Uint8List.fromList(data),
           name: fileName,
           mimeType: 'image/png',
         );
-        await file.saveTo(path);
+        await file.saveTo(location.path);
       }
       _resetForm();
     } else {

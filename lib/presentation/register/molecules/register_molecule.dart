@@ -44,14 +44,6 @@ class FormRegisterMolecule extends HookConsumerWidget {
       formGroup: form,
       child: Column(
         children: [
-          Text(
-            'Crear Usuario ',
-            style: GoogleFonts.itim(
-              color: QRUtils.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-            ),
-          ),
           CustomInputAtom(
             style: GoogleFonts.itim(
               fontSize: 20,

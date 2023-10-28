@@ -8,10 +8,24 @@ class RegisterTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: const [
-        BackgroundPageMolecule(),
-        SingleChildScrollView(
-          child: RegisterOrganism(),
+      children: [
+        const BackgroundPageMolecule(),
+        SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                    child: Image.asset(
+                      'assets/icon/qr.png',
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  const RegisterOrganism(),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );

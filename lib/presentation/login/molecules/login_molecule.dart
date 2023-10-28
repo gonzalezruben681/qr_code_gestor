@@ -44,7 +44,7 @@ class FormMolecule extends HookConsumerWidget {
             style: GoogleFonts.itim(
               color: QRUtils.white,
               fontWeight: FontWeight.w600,
-              fontSize: 20,
+              fontSize: 30,
             ),
           ),
           CustomInputAtom(
