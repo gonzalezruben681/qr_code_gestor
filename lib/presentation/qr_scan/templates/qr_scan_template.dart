@@ -28,6 +28,7 @@ class QRScanTemplate extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final qrstr = ref.watch(contactDataProvider.notifier);
+
     final contact = ref.read(contactProvider);
     final selectedIndex = useState<int?>(null);
     final contactos = useState<List<ContactoModel>>([]);
@@ -57,6 +58,7 @@ class QRScanTemplate extends HookConsumerWidget {
       children: [
         Column(
           children: [
+            const SizedBox(height: 120),
             Container(
                 height: 40,
                 width: 300,
@@ -107,18 +109,37 @@ class QRScanTemplate extends HookConsumerWidget {
                       context: context,
                       content: ScanMolecule(),
                       backgroundColor: QRUtils.white,
-                      onPressed: () async {
+                      onPressed: () {
                         Navigator.pop(context);
+
                         if (qrstr.state.isNotEmpty) {
-                          Map<String, dynamic> mapa =
-                              Map.fromEntries(qrstr.state.split(',').map((s) {
-                            final List<String> parts = s.trim().split(':');
-                            return MapEntry(parts[0], parts[1]);
-                          }));
-                          contacto = ContactoModel.fromJson(mapa);
-                          nameController.text = contacto!.nombre;
-                          qrstr.state = '';
-                          // Parsear el mensaje para obtener un mapa
+                          // Utilizar una expresión regular para mantener solo los caracteres deseados
+                          final sanitizedString = qrstr.state.replaceAll(
+                              RegExp(r'[^,:áéíóúÁÉÍÓÚA-Za-z0-9\s]'), '');
+
+                          List<String> parts = sanitizedString.split(',');
+                          if (parts.length >= 2) {
+                            Map<String, dynamic> mapa =
+                                Map.fromEntries(parts.map((s) {
+                              final List<String> subparts = s.trim().split(':');
+                              if (subparts.length == 2) {
+                                return MapEntry(subparts[0], subparts[1]);
+                              }
+                              // Puedes manejar el caso donde no haya suficientes elementos.
+                              return const MapEntry('',
+                                  ''); // O cualquier valor predeterminado que desees.
+                            }));
+                            if (mapa.containsKey('nombre') &&
+                                mapa.containsKey('telefono')) {
+                              contacto = ContactoModel.fromJson(mapa);
+                              nameController.text = contacto!.nombre;
+                            } else {
+                              qrstr.state = '';
+                            }
+                            // Parsear el mensaje para obtener un mapa
+                          } else {
+                            return null;
+                          }
                         } else {
                           return null;
                         }
@@ -141,7 +162,7 @@ class QRScanTemplate extends HookConsumerWidget {
               ),
             ),
             Container(
-              height: 200,
+              height: 400,
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: ListView.builder(
                 itemCount: options.value.length,

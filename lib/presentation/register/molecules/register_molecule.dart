@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';

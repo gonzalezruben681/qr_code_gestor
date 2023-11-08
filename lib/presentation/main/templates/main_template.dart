@@ -46,6 +46,7 @@ class MainTemplate extends HookConsumerWidget {
                 ),
               ),
               IndexedStack(
+                sizing: StackFit.expand,
                 index: currentIndex.value,
                 children: const [QRScanWiew(), QRGestorView(), AdminView()],
               ),
