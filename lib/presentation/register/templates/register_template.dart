@@ -7,6 +7,7 @@ class RegisterTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Stack(
       children: [
         const BackgroundPageMolecule(),

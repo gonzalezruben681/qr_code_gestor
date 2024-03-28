@@ -48,30 +48,32 @@ class CustomInputAtom extends StatelessWidget {
                       blurRadius: 5)
                 ]),
           ),
-          ReactiveTextField<String>(
-            style: style,
-            cursorColor: const Color(0xff18255c),
-            formControlName: formControlName,
-            inputFormatters: inputFormatters,
-            autocorrect: false,
-            obscureText: obscureText ?? false,
-            keyboardType: keyboardType ?? TextInputType.text,
-            validationMessages: validationMessages,
-            decoration: InputDecoration(
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                contentPadding: const EdgeInsets.fromLTRB(20.0, 15, 10.0, 10),
-                errorStyle: style,
-                prefixIcon: Icon(
-                  icon,
-                  color: const Color(0xff18255c),
-                ),
-                suffixIcon: suffixIcon,
-                focusedBorder: InputBorder.none,
-                border: InputBorder.none,
-                hintText: placeholder),
+          SizedBox(
+            child: ReactiveTextField<String>(
+              style: style,
+              cursorColor: const Color(0xff18255c),
+              formControlName: formControlName,
+              inputFormatters: inputFormatters,
+              autocorrect: false,
+              obscureText: obscureText ?? false,
+              keyboardType: keyboardType ?? TextInputType.text,
+              validationMessages: validationMessages,
+              decoration: InputDecoration(
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 11.0),
+                  errorStyle: style,
+                  prefixIcon: Icon(
+                    icon,
+                    color: const Color(0xff18255c),
+                  ),
+                  suffixIcon: suffixIcon,
+                  focusedBorder: InputBorder.none,
+                  border: InputBorder.none,
+                  hintText: placeholder),
+            ),
           ),
         ],
       ),
