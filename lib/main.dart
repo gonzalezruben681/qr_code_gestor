@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qr_code_gestor/presentation/prueba_view.dart';
 import 'package:qr_code_gestor/presentation/view/home_view.dart';
 import 'package:qr_code_gestor/presentation/view/login_view.dart';
 import 'package:qr_code_gestor/presentation/view/main_view.dart';
