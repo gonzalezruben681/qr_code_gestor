@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:qr_code_gestor/presentation/auth/reset_password/organisms/reset_organism.dart';
 import 'package:qr_code_gestor/presentation/molecules/background_molecule.dart';
-import 'package:qr_code_gestor/presentation/register/organisms/register_organism.dart';
 
-class RegisterTemplate extends StatelessWidget {
-  const RegisterTemplate({super.key});
+class ResetPasswordTemplate extends StatelessWidget {
+  const ResetPasswordTemplate({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     return Stack(
       children: [
         const BackgroundPageMolecule(),
@@ -22,7 +21,7 @@ class RegisterTemplate extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  const RegisterOrganism(),
+                  const ResetPasswordOrganism(),
                 ],
               ),
             ),

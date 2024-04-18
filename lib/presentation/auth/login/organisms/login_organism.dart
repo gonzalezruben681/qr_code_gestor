@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:qr_code_gestor/presentation/atoms/card_atom.dart';
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
-import 'package:qr_code_gestor/presentation/login/molecules/login_molecule.dart';
-import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
+import 'package:qr_code_gestor/presentation/auth/login/molecules/form_login_molecule.dart';
 
 class LoginOrganism extends StatelessWidget {
   const LoginOrganism({super.key});
@@ -17,7 +17,19 @@ class LoginOrganism extends StatelessWidget {
         children: [
           CardAtom(
             color: QRUtils.greyBackground.withOpacity(0.8),
-            child: FormMolecule(),
+            child: Column(
+              children: [
+                FormMolecule(),
+                TextButton(
+                    onPressed: () => Navigator.pushNamed(
+                        context, '/reset_password'),
+                    child: Text(
+                      '¿Olvidaste tu contraseña?',
+                      style: GoogleFonts.itim(
+                          fontSize: 20, color: QRUtils.yellowBackground),
+                    )),
+              ],
+            ),
           ),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),

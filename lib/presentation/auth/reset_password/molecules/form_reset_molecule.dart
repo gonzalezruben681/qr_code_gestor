@@ -1,6 +1,5 @@
 // ignore: must_be_immutable
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -14,33 +13,27 @@ import 'package:qr_code_gestor/presentation/atoms/custom_input_atom.dart';
 import 'package:qr_code_gestor/providers/firebase_auth_providers.dart';
 
 // ignore: must_be_immutable
-class FormMolecule extends HookConsumerWidget {
-  FormMolecule({super.key});
+class FormResetPasswordMolecule extends HookConsumerWidget {
+  FormResetPasswordMolecule({super.key});
 
   late String email;
-  late String password;
 
 // validaciones del formulario
   final form = FormGroup({
     'email': FormControl<String>(validators: [
-      Validators.required,
-      Validators.email,
-    ]),
-    'password': FormControl<String>(validators: [
       Validators.required,
     ]),
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showPassword = useState(true);
     final authRepository = ref.read(firebaseAuthProvider);
     return ReactiveForm(
       formGroup: form,
       child: Column(
         children: [
           Text(
-            'Entrar',
+            'Recupera tu cuenta',
             style: GoogleFonts.itim(
               color: QRUtils.white,
               fontWeight: FontWeight.w600,
@@ -53,38 +46,18 @@ class FormMolecule extends HookConsumerWidget {
             ),
             icon: Icons.supervised_user_circle,
             keyboardType: TextInputType.emailAddress,
-            placeholder: 'Email',
+            placeholder: 'Ingresa tu email',
             formControlName: 'email',
             validationMessages: {
               ValidationMessage.required: (error) => 'Este campo es requerido',
               ValidationMessage.email: (error) => 'Ingrese un email correcto',
             },
           ),
-          CustomInputAtom(
-            style: GoogleFonts.itim(
-              fontSize: 20,
-            ),
-            icon: Icons.lock_outline,
-            placeholder: 'Contraseña',
-            formControlName: 'password',
-            validationMessages: {
-              ValidationMessage.required: (error) => 'Este campo es requerido',
-            },
-            obscureText: showPassword.value,
-            suffixIcon: IconButton(
-              icon: Icon(
-                Icons.remove_red_eye_outlined,
-                color:
-                    showPassword.value ? Colors.grey : const Color(0xff18255c),
-              ),
-              onPressed: () => showPassword.value = !showPassword.value,
-            ),
-          ),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: CustomButtonAtom(
-              text: 'Iniciar sesión',
+              text: 'Enviar',
               style:
                   GoogleFonts.itim(fontSize: 20, color: QRUtils.greyBackground),
               onPressed: () async {
@@ -93,26 +66,26 @@ class FormMolecule extends HookConsumerWidget {
                   form.markAllAsTouched();
                   return;
                 }
-                email = form.control('email').value!;
-                password = form.control('password').value!;
 
-                final auth = await authRepository.loginUser(
-                    email.trim(), password.trim());
-                if (auth) {
-                  // ignore: use_build_context_synchronously
-                  Navigator.pushReplacementNamed(context, '/main');
-                } else {
+                email = form.control('email').value!;
+
+                final authResetPassword =
+                    await authRepository.sendResetPasswordLink(email);
+                if (authResetPassword != null) {
                   // ignore: use_build_context_synchronously
                   SnackbarNotification.handleNotification(
                       context: context,
                       message:
-                          'usuario/contraseña incorrectas o aun no esta registrado',
+                          'el email es incorrecto o aun no esta registrado $authResetPassword',
                       color: Colors.red);
+                } else {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushReplacementNamed(context, '/login');
                 }
               },
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
         ],
       ),
     );

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_gestor/presentation/login/organisms/login_organism.dart';
+import 'package:qr_code_gestor/presentation/auth/register/organisms/register_organism.dart';
 import 'package:qr_code_gestor/presentation/molecules/background_molecule.dart';
 
-class LoginTemplate extends StatelessWidget {
-  const LoginTemplate({super.key});
+class RegisterTemplate extends StatelessWidget {
+  const RegisterTemplate({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class LoginTemplate extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  const LoginOrganism(),
+                  const RegisterOrganism(),
                 ],
               ),
             ),

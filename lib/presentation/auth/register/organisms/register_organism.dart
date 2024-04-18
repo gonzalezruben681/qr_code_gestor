@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_code_gestor/presentation/atoms/card_atom.dart';
-import 'package:qr_code_gestor/presentation/register/molecules/register_molecule.dart';
+import 'package:qr_code_gestor/presentation/auth/register/molecules/register_molecule.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 
 class RegisterOrganism extends StatelessWidget {

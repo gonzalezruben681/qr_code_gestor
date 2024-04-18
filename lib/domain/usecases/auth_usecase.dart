@@ -21,4 +21,8 @@ class AuthenticationUseCase {
   Future<bool> isUserLoggedIn() async {
     return await authenticationRepository.isUserLoggedIn();
   }
+
+  Future<String?> sendResetPasswordLink(String email) async {
+    return await authenticationRepository.sendResetPasswordLink(email);
+  }
 }
