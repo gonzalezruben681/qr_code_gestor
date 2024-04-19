@@ -102,8 +102,8 @@ class FormMolecule extends HookConsumerWidget {
                   // ignore: use_build_context_synchronously
                   Navigator.pushReplacementNamed(context, '/main');
                 } else {
-                  // ignore: use_build_context_synchronously
                   SnackbarNotification.handleNotification(
+                  // ignore: use_build_context_synchronously
                       context: context,
                       message:
                           'usuario/contraseña incorrectas o aun no esta registrado',

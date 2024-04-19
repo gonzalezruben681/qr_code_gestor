@@ -205,10 +205,10 @@ class QRScanTemplate extends HookConsumerWidget {
                                 color: Colors.red);
                           } else {
                             await contact.addContact(contactoModel);
-                            // ignore: use_build_context_synchronously
                             SnackbarNotification.handleNotification(
-                                message: 'Se agrego correctamente',
+                            // ignore: use_build_context_synchronously
                                 context: context,
+                                message: 'Se agrego correctamente',
                                 color: Colors.greenAccent);
                             qrstr.state = '';
                             contacto = null;

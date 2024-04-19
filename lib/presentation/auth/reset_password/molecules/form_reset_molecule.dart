@@ -72,13 +72,18 @@ class FormResetPasswordMolecule extends HookConsumerWidget {
                 final authResetPassword =
                     await authRepository.sendResetPasswordLink(email);
                 if (authResetPassword != null) {
-                  // ignore: use_build_context_synchronously
                   SnackbarNotification.handleNotification(
+                      // ignore: use_build_context_synchronously
                       context: context,
                       message:
                           'el email es incorrecto o aun no esta registrado $authResetPassword',
                       color: Colors.red);
                 } else {
+                  SnackbarNotification.handleNotification(
+                      // ignore: use_build_context_synchronously
+                      context: context,
+                      message: 'el email fue enviado',
+                      color: Colors.green);
                   // ignore: use_build_context_synchronously
                   Navigator.pushReplacementNamed(context, '/login');
                 }

@@ -79,15 +79,15 @@ class AddOptionMolecule extends HookConsumerWidget {
                 }
                 final opction = await options.addOption(opcion);
                 if (opction) {
-                  // ignore: use_build_context_synchronously
                   SnackbarNotification.handleNotification(
+                  // ignore: use_build_context_synchronously
                       context: context,
                       message: 'Se agrego correctamente la opción',
                       color: QRUtils.greyBackground);
                   form.control('opcion').reset();
                 } else {
-                  // ignore: use_build_context_synchronously
                   SnackbarNotification.handleNotification(
+                  // ignore: use_build_context_synchronously
                       context: context,
                       message:
                           'Hubo un error al agregar la opción, intente de nuevo',

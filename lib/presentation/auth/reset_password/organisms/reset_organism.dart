@@ -9,7 +9,6 @@ class ResetPasswordOrganism extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // height: MediaQuery.of(context).size.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -17,12 +16,6 @@ class ResetPasswordOrganism extends StatelessWidget {
             color: QRUtils.greyBackground.withOpacity(0.8),
             child: Column(
               children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.arrow_back_rounded,
-                        size: 40, color: QRUtils.yellowBackground)),
                 FormResetPasswordMolecule(),
               ],
             ),

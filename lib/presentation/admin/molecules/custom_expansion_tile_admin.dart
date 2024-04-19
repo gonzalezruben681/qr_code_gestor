@@ -188,14 +188,14 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
                             opcion = await options.deleteOption(option!);
 
                             if (opcion) {
-                              // ignore: use_build_context_synchronously
                               SnackbarNotification.handleNotification(
+                              // ignore: use_build_context_synchronously
                                   context: context,
                                   message: 'Se elimino correctamente la opción',
                                   color: QRUtils.greyBackground);
                             } else {
-                              // ignore: use_build_context_synchronously
                               SnackbarNotification.handleNotification(
+                              // ignore: use_build_context_synchronously
                                   context: context,
                                   message:
                                       'Hubo un error al eliminar la opción, intente de nuevo',

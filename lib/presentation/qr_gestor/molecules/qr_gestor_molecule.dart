@@ -121,14 +121,14 @@ class QRGestorMolecule extends HookWidget {
     final data = im.encodePng(image);
     if (kIsWeb) {
       final fileName = '$nombre.png';
-      final location = await getSavePath(suggestedName: fileName);
+      final location = await getSaveLocation(suggestedName: fileName);
       if (location != null) {
         final file = XFile.fromData(
           Uint8List.fromList(data),
           name: fileName,
           mimeType: 'image/png',
         );
-        await file.saveTo(location);
+        await file.saveTo(location.path);
       }
       _resetForm();
     } else {

@@ -22,12 +22,6 @@ class RegisterOrganism extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.arrow_back_rounded,
-                            size: 40, color: QRUtils.yellowBackground)),
                     const SizedBox(
                       width: 10,
                     ),
