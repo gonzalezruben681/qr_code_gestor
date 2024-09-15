@@ -71,6 +71,16 @@ class AuthRepositoryImpl implements AuthRepository {
     await _storage.delete(key: 'token');
   }
 
+  @override
+  Future<String?> sendResetPasswordLink(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    }
+  }
+
   // UserModel getCurrentUser() {
   //   final currentUser = _auth.currentUser;
   //   if (currentUser != null) {

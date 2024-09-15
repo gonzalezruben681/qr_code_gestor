@@ -9,15 +9,21 @@ class AdminTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CardAtom(
-          color: QRUtils.greyBackground,
-          child: AddOptionMolecule(),
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 100),
+            CardAtom(
+              color: QRUtils.greyBackground,
+              child: AddOptionMolecule(),
+            ),
+            const SizedBox(height: 20),
+            const AdminOrganism()
+          ],
         ),
-        const AdminOrganism()
-      ],
+      ),
     );
   }
 }

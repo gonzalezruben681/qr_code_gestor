@@ -13,24 +13,19 @@ class AdminOrganism extends HookConsumerWidget {
     final optionsStream = ref.watch(optionProvider).getOptions();
     final optionsState = useStream(optionsStream, initialData: const []);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          height: 200,
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: ListView.builder(
-            itemCount: optionsState.data?.length,
-            itemBuilder: (context, index) {
-              final option = optionsState.data?[index];
-              return ContactExpansionTileMolecule(
-                option: option,
-                index: index,
-              );
-            },
-          ),
-        ),
-      ],
+    return Container(
+      height: 400,
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: ListView.builder(
+        itemCount: optionsState.data?.length,
+        itemBuilder: (context, index) {
+          final option = optionsState.data?[index];
+          return ContactExpansionTileMolecule(
+            option: option,
+            index: index,
+          );
+        },
+      ),
     );
   }
 }

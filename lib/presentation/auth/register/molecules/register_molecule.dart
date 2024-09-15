@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import 'package:qr_code_gestor/presentation/atoms/custom_button_atom.dart';
@@ -44,14 +43,6 @@ class FormRegisterMolecule extends HookConsumerWidget {
       formGroup: form,
       child: Column(
         children: [
-          Text(
-            'Crear Usuario ',
-            style: GoogleFonts.itim(
-              color: QRUtils.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-            ),
-          ),
           CustomInputAtom(
             style: GoogleFonts.itim(
               fontSize: 20,

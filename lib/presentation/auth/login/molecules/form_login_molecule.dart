@@ -44,7 +44,7 @@ class FormMolecule extends HookConsumerWidget {
             style: GoogleFonts.itim(
               color: QRUtils.white,
               fontWeight: FontWeight.w600,
-              fontSize: 20,
+              fontSize: 30,
             ),
           ),
           CustomInputAtom(
@@ -102,8 +102,8 @@ class FormMolecule extends HookConsumerWidget {
                   // ignore: use_build_context_synchronously
                   Navigator.pushReplacementNamed(context, '/main');
                 } else {
-                  // ignore: use_build_context_synchronously
                   SnackbarNotification.handleNotification(
+                  // ignore: use_build_context_synchronously
                       context: context,
                       message:
                           'usuario/contraseña incorrectas o aun no esta registrado',
@@ -112,7 +112,7 @@ class FormMolecule extends HookConsumerWidget {
               },
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
         ],
       ),
     );

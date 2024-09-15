@@ -11,12 +11,8 @@ import 'package:qr_code_gestor/providers/contact_provider.dart';
 import '../../molecules/scanner_error_widget.dart';
 
 class ScanMolecule extends HookConsumerWidget {
-  // final Function(BarcodeCapture) onDetect;
-  // final MobileScannerController cameraController;
   ScanMolecule({
     super.key,
-    // required this.onDetect,
-    // required this.cameraController,
   });
 
   final MobileScannerController cameraController =
@@ -24,26 +20,8 @@ class ScanMolecule extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final contacto = ref.watch(contactDataProvider);
-    final qrstr = ref.read(contactDataProvider.notifier);
+    final qrstrPrint = ref.watch(contactDataProvider);
     final barcodeState = useState<BarcodeCapture?>(null);
-
-    // void startOrStop() {
-    //   try {
-    //     if (isStarted.value) {
-    //       cameraController.stop();
-    //     } else {
-    //       cameraController.start();
-    //     }
-    //     isStarted.value = !isStarted.value;
-    //   } on Exception catch (e) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: Text('Something went wrong! $e'),
-    //         backgroundColor: Colors.red,
-    //       ),
-    //     );
-    //   }
-    // }
 
     return SizedBox(
       height: 325,
@@ -63,9 +41,9 @@ class ScanMolecule extends HookConsumerWidget {
                   fit: BoxFit.cover,
                   onDetect: (barcode) {
                     barcodeState.value = barcode;
-                    qrstr.state =
+                    ref.read(contactDataProvider.notifier).state =
                         barcodeState.value?.barcodes.first.rawValue ?? '';
-                    debugPrint('Barcode found! ${qrstr.state}');
+                    // debugPrint('Barcode found! $qrstrPrint');
                   },
                 ),
               ),
@@ -77,14 +55,6 @@ class ScanMolecule extends HookConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // IconButton(
-              //   color: Colors.white,
-              //   icon: isStarted.value
-              //       ? const Icon(Icons.stop)
-              //       : const Icon(Icons.play_arrow),
-              //   iconSize: 32.0,
-              //   onPressed: startOrStop,
-              // ),
               IconButton(
                 color: Colors.black,
                 icon: ValueListenableBuilder(
@@ -127,7 +97,7 @@ class ScanMolecule extends HookConsumerWidget {
                     fontSize: 15, color: QRUtils.greyBackground),
               ),
               Text(
-                qrstr.state,
+                qrstrPrint,
                 style: GoogleFonts.itim(
                     fontSize: 15, color: QRUtils.greyBackground),
               ),

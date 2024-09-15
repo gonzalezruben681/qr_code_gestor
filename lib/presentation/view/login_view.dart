@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_gestor/presentation/login/templates/login_template.dart';
+import 'package:qr_code_gestor/presentation/auth/login/templates/login_template.dart';
 import 'package:qr_code_gestor/presentation/utils/qr_utils.dart';
 
 class LoginView extends StatelessWidget {
