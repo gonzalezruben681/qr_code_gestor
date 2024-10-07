@@ -11,39 +11,17 @@ import 'package:qr_code_gestor/providers/contact_provider.dart';
 import '../../molecules/scanner_error_widget.dart';
 
 class ScanMolecule extends HookConsumerWidget {
-  // final Function(BarcodeCapture) onDetect;
-  // final MobileScannerController cameraController;
   ScanMolecule({
     super.key,
-    // required this.onDetect,
-    // required this.cameraController,
   });
 
   final MobileScannerController cameraController =
       MobileScannerController(detectionSpeed: DetectionSpeed.unrestricted);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final contacto = ref.watch(contactDataProvider);
     final qrstr = ref.read(contactDataProvider.notifier);
     final barcodeState = useState<BarcodeCapture?>(null);
-
-    // void startOrStop() {
-    //   try {
-    //     if (isStarted.value) {
-    //       cameraController.stop();
-    //     } else {
-    //       cameraController.start();
-    //     }
-    //     isStarted.value = !isStarted.value;
-    //   } on Exception catch (e) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: Text('Something went wrong! $e'),
-    //         backgroundColor: Colors.red,
-    //       ),
-    //     );
-    //   }
-    // }
 
     return SizedBox(
       height: 325,
@@ -77,24 +55,21 @@ class ScanMolecule extends HookConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // IconButton(
-              //   color: Colors.white,
-              //   icon: isStarted.value
-              //       ? const Icon(Icons.stop)
-              //       : const Icon(Icons.play_arrow),
-              //   iconSize: 32.0,
-              //   onPressed: startOrStop,
-              // ),
               IconButton(
                 color: Colors.black,
-                icon: ValueListenableBuilder(
-                  valueListenable: cameraController.torchState,
+                icon: ValueListenableBuilder<MobileScannerState>(
+                  valueListenable: cameraController,
                   builder: (context, state, child) {
-                    switch (state) {
+                    switch (state.torchState) {
                       case TorchState.off:
                         return const Icon(Icons.flash_off, color: Colors.grey);
                       case TorchState.on:
                         return const Icon(Icons.flash_on, color: Colors.yellow);
+                      case TorchState.auto:
+                        return const Icon(Icons.flash_auto, color: Colors.blue);
+                      case TorchState.unavailable:
+                      default:
+                        return const Icon(Icons.flash_off, color: Colors.grey);
                     }
                   },
                 ),
@@ -103,13 +78,14 @@ class ScanMolecule extends HookConsumerWidget {
               ),
               IconButton(
                 color: Colors.black,
-                icon: ValueListenableBuilder(
-                  valueListenable: cameraController.cameraFacingState,
+                icon: ValueListenableBuilder<MobileScannerState>(
+                  valueListenable: cameraController,
                   builder: (context, state, child) {
-                    switch (state) {
+                    switch (state.cameraDirection) {
                       case CameraFacing.front:
                         return const Icon(Icons.camera_front);
                       case CameraFacing.back:
+                      default:
                         return const Icon(Icons.camera_rear);
                     }
                   },
