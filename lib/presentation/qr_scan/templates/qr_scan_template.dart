@@ -130,7 +130,11 @@ class QRScanTemplate extends HookConsumerWidget {
                                   ''); // O cualquier valor predeterminado que desees.
                             }));
                             if (mapa.containsKey('nombre') &&
-                                mapa.containsKey('telefono')) {
+                                mapa.containsKey('telefono') &&
+                                mapa['nombre'] != '' &&
+                                mapa['telefono'] != '' &&
+                                RegExp(r'^\d+$').hasMatch(mapa['telefono'].toString().trim())) {
+                              // Verificar que 'telefono' contenga solo números
                               contacto = ContactoModel.fromJson(mapa);
                               nameController.text = contacto!.nombre;
                             } else {
@@ -206,7 +210,7 @@ class QRScanTemplate extends HookConsumerWidget {
                           } else {
                             await contact.addContact(contactoModel);
                             SnackbarNotification.handleNotification(
-                            // ignore: use_build_context_synchronously
+                                // ignore: use_build_context_synchronously
                                 context: context,
                                 message: 'Se agrego correctamente',
                                 color: Colors.greenAccent);

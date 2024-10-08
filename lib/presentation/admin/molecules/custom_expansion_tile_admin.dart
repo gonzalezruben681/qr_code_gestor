@@ -189,13 +189,13 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
 
                             if (opcion) {
                               SnackbarNotification.handleNotification(
-                              // ignore: use_build_context_synchronously
+                                  // ignore: use_build_context_synchronously
                                   context: context,
                                   message: 'Se elimino correctamente la opción',
                                   color: QRUtils.greyBackground);
                             } else {
                               SnackbarNotification.handleNotification(
-                              // ignore: use_build_context_synchronously
+                                  // ignore: use_build_context_synchronously
                                   context: context,
                                   message:
                                       'Hubo un error al eliminar la opción, intente de nuevo',
@@ -227,7 +227,7 @@ class ContactExpansionTileMolecule extends HookConsumerWidget {
               child: AnimatedCrossFade(
                 firstChild: const SizedBox.shrink(),
                 secondChild: SizedBox(
-                  height: 200,
+                  height: 300,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
